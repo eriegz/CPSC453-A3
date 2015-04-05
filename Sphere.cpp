@@ -7,7 +7,7 @@ Sphere::Sphere(double rad, double x, double y, double z){
     zCoor = z;
 }
 
-bool Sphere::isIntersected(){
+bool Sphere::isIntersected(glm::vec4 cam, glm::vec4 camDir, double &t){
     if(1 < 2)
         return true;
     else

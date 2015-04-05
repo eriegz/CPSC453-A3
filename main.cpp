@@ -9,38 +9,50 @@ using namespace std;
 
 void createScene(Plane* pF, Plane* pR, Plane* pB, Plane* pL){
     // Create 4 planes. First, the floor:
-    { //Scoped so that I can reuse 'v1, v2...' etc.
-        glm::vec4 v1( 0,  0,  0, 1);
-        glm::vec4 v2( 0, 10,  0, 1);
-        glm::vec4 v3( 0, 10, 10, 1);
-        glm::vec4 v4( 0,  0, 10, 1);
-        pF = new Plane(v1, v2, v3, v4);
+    { //Scoped so that I can reuse the names
+        glm::vec4 normal( 1,  0,  0, 0); //vector
+        glm::vec4 point ( 0,  0,  0, 1); //point
+        glm::vec4 min   ( 0,  0,  0, 1); //values
+        glm::vec4 max   ( 0, 10, 10, 1); //values
+        pF = new Plane(normal, point, min, max);
     }
     { // Right wall
-        glm::vec4 v1(10, 10,  0, 1);
-        glm::vec4 v2(10, 10, 10, 1);
-        glm::vec4 v3( 0, 10, 10, 1);
-        glm::vec4 v4( 0, 10,  0, 1);
-        pR = new Plane(v1, v2, v3, v4);
+        glm::vec4 normal( 0, -1,  0, 0);
+        glm::vec4 point ( 0, 10, 10, 1);
+        glm::vec4 min   ( 0,  0,  0, 1);
+        glm::vec4 max   (10,  0, 10, 1);
+        pR = new Plane(normal, point, min, max);
     }
     { // Back wall
-        glm::vec4 v1( 0,  0, 10, 1);
-        glm::vec4 v2( 0, 10, 10, 1);
-        glm::vec4 v3(10, 10, 10, 1);
-        glm::vec4 v4(10,  0, 10, 1);
-        pB = new Plane(v1, v2, v3, v4);
+        glm::vec4 normal( 0,  0, -1, 0);
+        glm::vec4 point ( 0, 10, 10, 1);
+        glm::vec4 min   ( 0,  0,  0, 1);
+        glm::vec4 max   (10, 10,  0, 1);
+        pB = new Plane(normal, point, min, max);
     }
     { // Left wall
-        glm::vec4 v1( 0,  0,  0, 1);
-        glm::vec4 v4( 0,  0, 10, 1);
-        glm::vec4 v3(10,  0, 10, 1);
-        glm::vec4 v2(10,  0,  0, 1);
-        pL = new Plane(v1, v2, v3, v4);
+        glm::vec4 normal( 0,  1,  0, 0);
+        glm::vec4 point ( 0,  0,  0, 1);
+        glm::vec4 min   ( 0,  0,  0, 1);
+        glm::vec4 max   (10,  0, 10, 1);
+        pL = new Plane(normal, point, min, max);
     }
 }
 
 int main(){
     vector<SceneObject*> objectArr;
+
+    //Define our camera position
+    glm::vec4 camera(5, 5, -5, 1);
+    //Create our direction vector for each pixel's camera ray
+    glm::vec4 cameraD(0, 0, 0, 1);
+    //Create our intersection point
+    glm::vec4 intersPoint(0, 0, 0, 1);
+
+    //Define our 3 point light sources
+    glm::vec4 pointLight1(2, 13, 2, 1);
+    glm::vec4 pointLight2(7, 13, 9, 1);
+    glm::vec4 pointLight3(8, 13, 3, 1);
 
     //Create the floor and walls
     Plane* pFloor = NULL;
@@ -63,6 +75,6 @@ int main(){
     vector<SceneObject*>::iterator i;
 
     for(vector<SceneObject>::size_type i = 0; i != objectArr.size(); i++){
-        objectArr[i]->isIntersected();
+        //objectArr[i]->isIntersected();
     }
 }

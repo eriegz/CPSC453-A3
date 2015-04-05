@@ -1,12 +1,14 @@
 #include "Plane.h"
 
-Plane::Plane(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3, glm::vec4 v4){
-    planeMatrix = new glm::mat4(v1, v2, v3, v4);
+Plane::Plane(glm::vec4 normal, glm::vec4 point, glm::vec4 min, glm::vec4 max){
+    planeMatrix = new glm::mat4(normal, point, min, max);
 }
 
-bool Plane::isIntersected(){
-    if(1 < 2)
-        return true;
-    else
-        return false;
+bool Plane::isIntersected(glm::vec4 cam, glm::vec4 camDir, double &t){
+    // If the viewing ray intersects the plane defined in this class's
+    // private variables, there should exist some t for which:
+    //      t = -n(O - A)
+    //           --------
+    //              n d
+    return true;
 }

@@ -2,6 +2,7 @@
 #define SPHERE_H
 
 #include "SceneObject.h"
+#include "glm/glm.hpp"
 
 #include <iostream>
 using namespace std;
@@ -17,7 +18,7 @@ private:
 public:
     Sphere(double, double, double, double);
 
-    bool isIntersected();
+    bool isIntersected(glm::vec4, glm::vec4, double &);
 
     double getRadius();
     double getX();
