@@ -55,9 +55,9 @@ int main(){
     vector<SceneObject*> objectArr;
 
     //Define our camera position
-    glm::vec4 camera(6, 5, -5, 1);
+    glm::vec4 cameraPosition(6, 5, -5, 1);
     //Create our direction vector for each pixel's camera ray
-    glm::vec4 cameraDir(-0.471, 0, 0.882, 1); //Normalized
+    glm::vec4 cameraDirection(-0.471, 0, 0.882, 1); //Normalized
     double tValue = 40;
     //Create our intersection point
     glm::vec4 intersectionPoint(0, 0, 0, 1);
@@ -104,8 +104,19 @@ int main(){
     }
 
     // ========== TEST SECTION ==============
-    pBack->isIntersected(camera, cameraDir, tValue, intersectionPoint);
+    pBack->isIntersected(cameraPosition, cameraDirection, tValue, intersectionPoint);
     //pBack->isIntersected2(camera, cameraDir, tValue);
 
+    /*
+    glm::vec4 testSphereC(0, 5, 5, 1);
+    Sphere* testSphere = new Sphere(testSphereC, 2);
+    glm::vec4 testCameraPosition(0, 5, -5, 1);
+    glm::vec4 testCameraDirection(0, 0, 1, 1); //Normalized
+    testSphere->isIntersected(testCameraPosition, testCameraDirection, tValue, intersectionPoint);
+    cout << "intersectionPoint:" << endl
+         << "  " << intersectionPoint.x
+         << "  " << intersectionPoint.y
+         << "  " << intersectionPoint.z << endl;
+    //*/
     cout << "No immediately-visible problems." << endl;
 }
