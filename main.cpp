@@ -59,7 +59,7 @@ int main(){
     glm::vec4 cameraDir(0, 0, 1, 1); //glm::vec4 cameraDir(0.0f, 0.0f, -1.0f, 1.0f);
     double tValue = 20;
     //Create our intersection point
-    glm::vec4 intersPoint(0, 0, 0, 1);
+    glm::vec4 intersectionPoint(0, 0, 0, 1);
 
     /*
     cout << "glm::dot(camera, cameraDir) = "
@@ -106,7 +106,7 @@ int main(){
     }
 
     // ========== TEST SECTION ==============
-    pBack->isIntersected(camera, cameraDir, tValue);
+    pBack->isIntersected(camera, cameraDir, tValue, intersectionPoint);
     //pBack->isIntersected2(camera, cameraDir, tValue);
 
     cout << "All good so far." << endl;

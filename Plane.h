@@ -15,8 +15,8 @@ private:
     glm::vec4 normal, point, min, max;
 public:
     Plane(glm::vec4, glm::vec4, glm::vec4, glm::vec4);
-    bool isIntersected(glm::vec4, glm::vec4, double &);
-    bool isIntersected2(glm::vec4, glm::vec4, double &);
+    bool isIntersected(glm::vec4, glm::vec4, double &, glm::vec4 &);
+    void getIntersectionPoint(glm::vec4, glm::vec4, double, glm::vec4 &);
     void completelyUselessFunction(glm::vec4);
 
     glm::vec4 getNormalVec();
