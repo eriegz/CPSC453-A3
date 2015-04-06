@@ -68,7 +68,6 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec4 camDir, double &t, glm::ve
     } else { //Divide by zero; t d.n.e.; No intersection
         return false;
     }
-    return false;
 }
 
 void Plane::getIntersectionPoint(glm::vec4 camP, glm::vec4 camD, double tInters, glm::vec4 &intersPoint){

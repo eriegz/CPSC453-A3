@@ -54,10 +54,10 @@ int main(){
     vector<SceneObject*> objectArr;
 
     //Define our camera position
-    glm::vec4 camera(5, 5, -5, 1); //glm::vec4 camera(5.0f, 5.0f, -5.0f, 1.0f);
+    glm::vec4 camera(6, 5, -5, 1);
     //Create our direction vector for each pixel's camera ray
-    glm::vec4 cameraDir(0, 0, 1, 1); //glm::vec4 cameraDir(0.0f, 0.0f, -1.0f, 1.0f);
-    double tValue = 20;
+    glm::vec4 cameraDir(-0.372, 0, 0.928, 1); //Normalized
+    double tValue = 40;
     //Create our intersection point
     glm::vec4 intersectionPoint(0, 0, 0, 1);
 
@@ -72,9 +72,6 @@ int main(){
     glm::vec4 pointLight2(7, 13, 9, 1);
     glm::vec4 pointLight3(8, 13, 3, 1);
 
-    // ================================
-    // ALL OF THE FOLLOWING CODE WORKS:
-    // ================================
     /*
     cout << "pFloor->getPointOnPlane().x = " << pFloor->getPointOnPlane().x << endl;
     cout << "pRight->getPointOnPlane().x = " << pRight->getPointOnPlane().x << endl;
@@ -109,5 +106,5 @@ int main(){
     pBack->isIntersected(camera, cameraDir, tValue, intersectionPoint);
     //pBack->isIntersected2(camera, cameraDir, tValue);
 
-    cout << "All good so far." << endl;
+    cout << "No immediately-visible problems." << endl;
 }
