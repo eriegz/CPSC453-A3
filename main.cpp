@@ -7,19 +7,14 @@
 #include <iostream>
 using namespace std;
 
-Plane* pFloor;
-Plane* pRight;
-Plane* pBack;
-Plane* pLeft;
-
-void createScene(){
+void createScene(Plane *&pF, Plane *&pR, Plane *&pB, Plane *&pL){
     // Create 4 planes. First, the floor:
     { // Scoping these so I can reuse the names
         glm::vec4 normal( 1,  0,  0, 0); //vector
         glm::vec4 point ( 0,  0,  0, 1); //point
         glm::vec4 min   ( 0,  0,  0, 1); //values
         glm::vec4 max   ( 0, 10, 10, 1); //values
-        pFloor = new Plane(normal, point, min, max);
+        pF = new Plane(normal, point, min, max);
     }
 
     { // Right wall
@@ -27,35 +22,35 @@ void createScene(){
         glm::vec4 point ( 0, 10, 10, 1);
         glm::vec4 min   ( 0,  0,  0, 1);
         glm::vec4 max   (10,  0, 10, 1);
-        pRight = new Plane(normal, point, min, max);
+        pR = new Plane(normal, point, min, max);
     }
     { // Back wall
         glm::vec4 normal( 0,  0, -1, 0);
         glm::vec4 point ( 0, 10, 10, 1);
         glm::vec4 min   ( 0,  0,  0, 1);
         glm::vec4 max   (10, 10,  0, 1);
-        pBack = new Plane(normal, point, min, max);
+        pB = new Plane(normal, point, min, max);
     }
     { // Left wall
         glm::vec4 normal( 0,  1,  0, 0);
         glm::vec4 point ( 0,  0,  0, 1);
         glm::vec4 min   ( 0,  0,  0, 1);
         glm::vec4 max   (10,  0, 10, 1);
-        pLeft = new Plane(normal, point, min, max);
+        pL = new Plane(normal, point, min, max);
     }
 
-    // ================================
-    // ALL OF THE FOLLOWING CODE WORKS:
-    // ================================
-    //cout << "pF->getPointOnPlane().x = " << pF->getPointOnPlane().x << endl;
-    //cout << "pR->getPointOnPlane().x = " << pR->getPointOnPlane().x << endl;
-    //cout << "pFloor = " << pFloor << endl;
-    //cout << "pRight = " << pRight << endl;
-    //cout << "pB = " << pB << endl;
-    //cout << "pL = " << pL << endl;
+    // To show how it isn't just a scope problem, I tried checking the
+    // value of pFloor at this point, and it contained a valid address.
 }
 
 int main(){
+    //Create the floor and walls
+    Plane* pFloor;
+    Plane* pRight;
+    Plane* pBack;
+    Plane* pLeft;
+    createScene(pFloor, pRight, pBack, pLeft);
+
     vector<SceneObject*> objectArr;
 
     //Define our camera position
@@ -76,10 +71,6 @@ int main(){
     glm::vec4 pointLight1(2, 13, 2, 1);
     glm::vec4 pointLight2(7, 13, 9, 1);
     glm::vec4 pointLight3(8, 13, 3, 1);
-
-    //Create the floor and walls
-
-    createScene();
 
     // ================================
     // ALL OF THE FOLLOWING CODE WORKS:
