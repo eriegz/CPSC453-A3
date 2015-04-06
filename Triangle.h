@@ -1,5 +1,5 @@
-#ifndef SPHERE_H
-#define SPHERE_H
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
 
 #define GLM_SWIZZLE
 
@@ -9,14 +9,13 @@
 #include <iostream>
 using namespace std;
 
-class Sphere : public SceneObject{
+class Triangle : public SceneObject{
 private:
-    glm::vec4 centerPosition;
-    double radius;
+    glm::vec4 vertex1, vertex2, vertex3;
 public:
-    Sphere(glm::vec4, double);
+    Triangle(glm::vec4, glm::vec4, glm::vec4);
     bool isIntersected(glm::vec4, glm::vec4, double &, glm::vec4 &);
     void getIntersectionPoint(glm::vec4, glm::vec4, double, glm::vec4 &);
 };
 
-#endif // SPHERE_H
+#endif // TRIANGLE_H

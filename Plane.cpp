@@ -82,12 +82,3 @@ void Plane::getIntersectionPoint(glm::vec4 camP, glm::vec4 camD, double tInters,
     */
     intersPoint = camP + camD;
 }
-
-glm::vec4 Plane::getNormalVec(){ return normal;}
-glm::vec4 Plane::getPointOnPlane(){ return point;}
-glm::vec4 Plane::getMinValues(){ return min;}
-glm::vec4 Plane::getMaxValues(){ return max;}
-
-void Plane::completelyUselessFunction(glm::vec4 p){
-    cout << "p.x inside useless = " << p.x << endl;
-}

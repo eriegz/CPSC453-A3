@@ -14,8 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     Sphere.cpp \
-    Plane.cpp
+    Plane.cpp \
+    Triangle.cpp
 
 HEADERS  += SceneObject.h \
     Sphere.h \
-    Plane.h
+    Plane.h \
+    Triangle.h

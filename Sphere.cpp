@@ -1,20 +1,14 @@
 #include "Sphere.h"
 
-Sphere::Sphere(double rad, double x, double y, double z){
+Sphere::Sphere(glm::vec4 cPos, double rad){
+    centerPosition = cPos;
     radius = rad;
-    xCoor = x;
-    yCoor = y;
-    zCoor = z;
 }
 
-bool Sphere::isIntersected(glm::vec4 cam, glm::vec4 camDir, double &t){
-    if(1 < 2)
-        return true;
-    else
-        return false;
+bool Sphere::isIntersected(glm::vec4 camPos, glm::vec4 camDir, double &t, glm::vec4 &intersectionPoint){
+    return true;
 }
 
-double Sphere::getRadius(){return this->radius;}
-double Sphere::getX(){return this->xCoor;}
-double Sphere::getY(){return this->yCoor;}
-double Sphere::getZ(){return this->zCoor;}
+void Sphere::getIntersectionPoint(glm::vec4 camP, glm::vec4 camD, double tInters, glm::vec4 &intersPoint){
+
+}

@@ -7,6 +7,10 @@
 #include <iostream>
 using namespace std;
 
+void createTriangles(){
+
+}
+
 void createScene(Plane *&pF, Plane *&pR, Plane *&pB, Plane *&pL){
     // Create 4 planes. First, the floor:
     { // Scoping these so I can reuse the names
@@ -38,9 +42,6 @@ void createScene(Plane *&pF, Plane *&pR, Plane *&pB, Plane *&pL){
         glm::vec4 max   (10,  0, 10, 1);
         pL = new Plane(normal, point, min, max);
     }
-
-    // To show how it isn't just a scope problem, I tried checking the
-    // value of pFloor at this point, and it contained a valid address.
 }
 
 int main(){
@@ -56,7 +57,7 @@ int main(){
     //Define our camera position
     glm::vec4 camera(6, 5, -5, 1);
     //Create our direction vector for each pixel's camera ray
-    glm::vec4 cameraDir(-0.372, 0, 0.928, 1); //Normalized
+    glm::vec4 cameraDir(-0.471, 0, 0.882, 1); //Normalized
     double tValue = 40;
     //Create our intersection point
     glm::vec4 intersectionPoint(0, 0, 0, 1);
