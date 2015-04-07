@@ -19,12 +19,13 @@
  */
 
 #include "RgbImage.h"
+using namespace std;
 
 #ifndef RGBIMAGE_DONT_USE_OPENGL
 #ifdef _WIN32
 #include <windows.h>
 #endif
-#include "GL/gl.h"
+#include <OpenGL/gl.h>
 #endif
 
 RgbImage::RgbImage( int numRows, int numCols )

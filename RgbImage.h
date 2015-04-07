@@ -27,8 +27,7 @@
 // Include the next line to turn off the routines that use OpenGL
 // #define RGBIMAGE_DONT_USE_OPENGL
 
-class RgbImage
-{
+class RgbImage{
 public:
 	RgbImage();
 	RgbImage( const char* filename );
