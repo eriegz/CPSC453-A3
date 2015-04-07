@@ -7,8 +7,25 @@
 #include <iostream>
 using namespace std;
 
-void createTriangles(){
-
+void createTriangles(Triangle *&t1, Triangle *&t2, Triangle *&t3){
+    { //Triangle 1
+        glm::vec4 vertex1(4.0, 1.2, 3.4, 1);
+        glm::vec4 vertex2(3.5, 2.8, 4.5, 1);
+        glm::vec4 vertex3(5.5, 1.5, 5.1, 1);
+        t1 = new Triangle(vertex1, vertex2, vertex3);
+    }
+    { //Triangle 2
+        glm::vec4 vertex1(4.0, 9.4, 1.2, 1);
+        glm::vec4 vertex2(7.0, 9.8, 4.6, 1);
+        glm::vec4 vertex3(5.0, 9.1, 4.7, 1);
+        t2 = new Triangle(vertex1, vertex2, vertex3);
+    }
+    { //Triangle 3
+        glm::vec4 vertex1(0, 0, 0, 1);
+        glm::vec4 vertex2(0, 0, 0, 1);
+        glm::vec4 vertex3(0, 0, 0, 1);
+        t3 = new Triangle(vertex1, vertex2, vertex3);
+    }
 }
 
 void createScene(Plane *&pF, Plane *&pR, Plane *&pB, Plane *&pL){
@@ -51,6 +68,12 @@ int main(){
     Plane* pBack;
     Plane* pLeft;
     createScene(pFloor, pRight, pBack, pLeft);
+
+    //Create our 3 triangles
+    Triangle* tri1;
+    Triangle* tri2;
+    Triangle* tri3;
+    createTriangles(tri1, tri2, tri3);
 
     vector<SceneObject*> objectArr;
 
