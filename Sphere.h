@@ -16,8 +16,9 @@ private:
     double radius;
 public:
     Sphere(glm::vec4, double);
-    bool isIntersected(glm::vec4, glm::vec4, double &, glm::vec4 &);
-    void getIntersectionPoint(glm::vec4, glm::vec4, double, glm::vec4 &);
+    bool isIntersected(glm::vec4, glm::vec3, double &, glm::vec3 &);
+    void getIntersectionPoint(glm::vec4, glm::vec3, double, glm::vec3 &);
+    unsigned char getColour();
 };
 
 #endif // SPHERE_H

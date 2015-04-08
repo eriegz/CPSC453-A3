@@ -5,7 +5,7 @@ Sphere::Sphere(glm::vec4 cPos, double rad){
     radius = rad;
 }
 
-bool Sphere::isIntersected(glm::vec4 camPos, glm::vec4 camDir, double &t, glm::vec4 &intersectionPoint){
+bool Sphere::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::vec3 &intersectionPoint){
     // d = camDir
     // D = Q - C = camPos - centerPosition
     // ||D||^2 = (magnitude of D)^2 = (glm::length(D))^2;
@@ -16,7 +16,7 @@ bool Sphere::isIntersected(glm::vec4 camPos, glm::vec4 camDir, double &t, glm::v
     double r_2 = pow(radius, 2);
     double discriminant = d_D_2 - (magD_2 - r_2);
     if(discriminant > 0){
-        cout << "Sphere and viewing ray have 2 intersections." << endl;
+        //cout << "Sphere and viewing ray have 2 intersections." << endl;
         double d_D = glm::dot(glm::vec3(camDir), D);
         double temp_t_1 = (-1 * (d_D)) + sqrt(discriminant);
         double temp_t_2 = (-1 * (d_D)) - sqrt(discriminant);
@@ -38,7 +38,9 @@ bool Sphere::isIntersected(glm::vec4 camPos, glm::vec4 camDir, double &t, glm::v
     return true;
 }
 
-void Sphere::getIntersectionPoint(glm::vec4 camP, glm::vec4 camD, double tInters, glm::vec4 &intersPoint){
+void Sphere::getIntersectionPoint(glm::vec4 camP, glm::vec3 camD, double tInters, glm::vec3 &intersPoint){
     camD *= tInters;
-    intersPoint = camP + camD;
+    intersPoint = glm::vec3(camP) + camD;
 }
+
+unsigned char Sphere::getColour(){ return (char)130; }

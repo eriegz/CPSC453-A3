@@ -18,7 +18,7 @@ Plane::Plane(glm::vec4 norm, glm::vec4 pt, glm::vec4 mi, glm::vec4 ma){
     */
 }
 
-bool Plane::isIntersected(glm::vec4 camPos, glm::vec4 camDir, double &t, glm::vec4 &intersectionPoint){
+bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::vec3 &intersectionPoint){
     // If the viewing ray intersects the plane defined in this class's
     // private variables, there should exist some t for which:
     //
@@ -70,7 +70,7 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec4 camDir, double &t, glm::ve
     }
 }
 
-void Plane::getIntersectionPoint(glm::vec4 camP, glm::vec4 camD, double tInters, glm::vec4 &intersPoint){
+void Plane::getIntersectionPoint(glm::vec4 camP, glm::vec3 camD, double tInters, glm::vec3 &intersPoint){
     camD *= tInters;
     /*
     cout << "\ncamP.x = " << camP.x << endl;
@@ -80,5 +80,7 @@ void Plane::getIntersectionPoint(glm::vec4 camP, glm::vec4 camD, double tInters,
     cout << "camD.y = " << camD.y << endl;
     cout << "camD.z = " << camD.z << endl;
     */
-    intersPoint = camP + camD;
+    intersPoint = glm::vec3(camP) + camD;
 }
+
+unsigned char Plane::getColour(){ return (char)80; }
