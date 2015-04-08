@@ -16,10 +16,12 @@ SOURCES += main.cpp \
     Sphere.cpp \
     Plane.cpp \
     Triangle.cpp \
-    RgbImage.cpp
+    RgbImage.cpp \
+    ObjectCreator.cpp
 
 HEADERS  += SceneObject.h \
     Sphere.h \
     Plane.h \
     Triangle.h \
-    RgbImage.h
+    RgbImage.h \
+    ObjectCreator.h
