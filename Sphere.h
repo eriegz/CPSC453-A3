@@ -14,11 +14,14 @@ class Sphere : public SceneObject{
 private:
     glm::vec4 centerPosition;
     double radius;
+    long redC;
+    long greenC;
+    long blueC;
 public:
-    Sphere(glm::vec4, double);
-    bool isIntersected(glm::vec4, glm::vec3, double &, glm::vec3 &);
+    Sphere(glm::vec4, double, long, long, long);
+    bool isIntersected(glm::vec4, glm::vec3, double, glm::vec3 &);
     void getIntersectionPoint(glm::vec4, glm::vec3, double, glm::vec3 &);
-    unsigned char getColour();
+    void getColour(float &, float &, float &);
 };
 
 #endif // SPHERE_H

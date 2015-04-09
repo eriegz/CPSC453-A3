@@ -14,9 +14,9 @@ private:
     glm::vec4 vertex1, vertex2, vertex3;
 public:
     Triangle(glm::vec4, glm::vec4, glm::vec4);
-    bool isIntersected(glm::vec4, glm::vec3, double &, glm::vec3 &);
+    bool isIntersected(glm::vec4, glm::vec3, double, glm::vec3 &);
     void getIntersectionPoint(glm::vec4, glm::vec3, double, glm::vec3 &);
-    unsigned char getColour();
+    void getColour(float &, float &, float &);
 };
 
 #endif // TRIANGLE_H

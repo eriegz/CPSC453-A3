@@ -1,11 +1,14 @@
 #include "Sphere.h"
 
-Sphere::Sphere(glm::vec4 cPos, double rad){
+Sphere::Sphere(glm::vec4 cPos, double rad, long red, long green, long blue){
     centerPosition = cPos;
     radius = rad;
+    redC = red;
+    greenC = green;
+    blueC = blue;
 }
 
-bool Sphere::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::vec3 &intersectionPoint){
+bool Sphere::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double t, glm::vec3 &intersectionPoint){
     // d = camDir
     // D = Q - C = camPos - centerPosition
     // ||D||^2 = (magnitude of D)^2 = (glm::length(D))^2;
@@ -43,4 +46,8 @@ void Sphere::getIntersectionPoint(glm::vec4 camP, glm::vec3 camD, double tInters
     intersPoint = glm::vec3(camP) + camD;
 }
 
-unsigned char Sphere::getColour(){ return (char)130; }
+void Sphere::getColour(float &myR, float &myG, float &myB){
+    myR = redC;
+    myG = greenC;
+    myB = blueC;
+}
