@@ -3,32 +3,32 @@
 void ObjectCreator::createScene(Plane *&pF, Plane *&pR, Plane *&pB, Plane *&pL){
     // Scoping these so I can reuse the names
     { // Floor
-        glm::vec4 normal( 1,  0,  0, 0); //vector
-        glm::vec4 point ( 0,  0,  0, 1); //point
-        glm::vec4 min   ( 0,  0,  0, 1); //values
-        glm::vec4 max   ( 0, 10, 10, 1); //values
-        pF = new Plane(normal, point, min, max, 100, 100, 100);
+        glm::vec3 normal( 1,  0,  0);
+        glm::vec3 point ( 0,  0,  0);
+        glm::vec3 min   ( 0,  0,  0);
+        glm::vec3 max   ( 0, 10, 10);
+        pF = new Plane(normal, point, min, max, 160, 160, 160);
     }
     { // Right wall
-        glm::vec4 normal( 0, -1,  0, 0);
-        glm::vec4 point ( 0, 10, 10, 1);
-        glm::vec4 min   ( 0, 10,  0, 1);
-        glm::vec4 max   (10, 10, 10, 1);
-        pR = new Plane(normal, point, min, max, 130, 130, 130);
+        glm::vec3 normal( 0, -1,  0);
+        glm::vec3 point ( 0, 10, 10);
+        glm::vec3 min   ( 0, 10,  0);
+        glm::vec3 max   (10, 10, 10);
+        pR = new Plane(normal, point, min, max, 120, 120, 120);
     }
     { // Back wall
-        glm::vec4 normal( 0,  0, -1, 0);
-        glm::vec4 point ( 0, 10, 10, 1);
-        glm::vec4 min   ( 0,  0, 10, 1);
-        glm::vec4 max   (10, 10, 10, 1);
-        pB = new Plane(normal, point, min, max, 150, 150, 150);
+        glm::vec3 normal( 0,  0, -1);
+        glm::vec3 point ( 0, 10, 10);
+        glm::vec3 min   ( 0,  0, 10);
+        glm::vec3 max   (10, 10, 10);
+        pB = new Plane(normal, point, min, max, 140, 140, 140);
     }
     { // Left wall
-        glm::vec4 normal( 0,  1,  0, 0);
-        glm::vec4 point ( 0,  0,  0, 1);
-        glm::vec4 min   ( 0,  0,  0, 1);
-        glm::vec4 max   (10,  0, 10, 1);
-        pL = new Plane(normal, point, min, max, 140, 140, 140);
+        glm::vec3 normal( 0,  1,  0);
+        glm::vec3 point ( 0,  0,  0);
+        glm::vec3 min   ( 0,  0,  0);
+        glm::vec3 max   (10,  0, 10);
+        pL = new Plane(normal, point, min, max, 130, 130, 130);
     }
 }
 
@@ -53,21 +53,21 @@ void ObjectCreator::createSpheres(Sphere *&sph1, Sphere *&sph2, Sphere *&sph3, S
 
 void ObjectCreator::createTriangles(Triangle *&t1, Triangle *&t2, Triangle *&t3){
     { //Triangle 1
-        glm::vec3 vertex1(9, 5, 6.5);
-        glm::vec3 vertex2(7, 2.2, 8);
+        glm::vec3 vertex1(9, 5.5, 6.5);
+        glm::vec3 vertex2(7.5, 2.2, 8);
         glm::vec3 vertex3(7.1, 4.8, 5.1);
-        t1 = new Triangle(vertex1, vertex2, vertex3, 0, 240, 0);
+        t1 = new Triangle(vertex1, vertex2, vertex3, 212, 0, 174);
     }
     { //Triangle 2
         glm::vec3 vertex1(7.1, 4.8, 5.1);
-        glm::vec3 vertex2(7, 2.2, 8);
-        glm::vec3 vertex3(5.0, 5.1, 8.2);
-        t2 = new Triangle(vertex1, vertex2, vertex3, 0, 240, 0);
+        glm::vec3 vertex2(7.5, 2.2, 8);
+        glm::vec3 vertex3(5.3, 5.1, 8.2);
+        t2 = new Triangle(vertex1, vertex2, vertex3, 163, 0, 134);
     }
     { //Triangle 3
-        glm::vec3 vertex1(9, 5, 6.5);
+        glm::vec3 vertex1(9, 5.5, 6.5);
         glm::vec3 vertex2(7.1, 4.8, 5.1);
-        glm::vec3 vertex3(5.0, 5.1, 8.2);
-        t3 = new Triangle(vertex1, vertex2, vertex3, 0, 240, 0);
+        glm::vec3 vertex3(5.3, 5.1, 8.2);
+        t3 = new Triangle(vertex1, vertex2, vertex3, 110, 0, 91);
     }
 }

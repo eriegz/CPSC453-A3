@@ -61,9 +61,9 @@ void traversePixels(RgbImage *fImage, glm::vec4 bCorner, glm::vec4 tCorner,
     //rayDirection(0, 0, 0, 0);
     glm::vec4 pixelPosition(0, 0, 0, 1);
 
-    for(int i = 0/*33*/; i < myRows/*34*/; i++){
+    for(int i = 0/*550*/; i < myRows/*551*/; i++){
         double zOffset = ((double)i / (double)myRows) * zDistance;
-        for(int j = 0/*343*/; j < myCols/*344*/; j++){
+        for(int j = 0/*650*/; j < myCols/*651*/; j++){
             double yOffset = ((double)j / (double)myCols) * imWidth;
             double xOffset = ((double)i / (double)myRows) * imHeight;
             pixelPosition.x = bCorner.x + xOffset;
@@ -78,6 +78,7 @@ void traversePixels(RgbImage *fImage, glm::vec4 bCorner, glm::vec4 tCorner,
 //                cout << "t = " << t << endl;
 //                cout << "currentLowestT = " << currentLowestT << endl;
                 if(oArr[itr]->isIntersected(cPos, rayDir3, t, intPoint) == true){
+//                    cout << "============SUCCESSFUL INTERSECTION============" << endl;
 //                    cout << "After isIntersected() is called, t = " << t << endl;
                     if(t < currentLowestT){
 //                        cout << t << " is less than " << currentLowestT << "." << endl;
@@ -110,10 +111,10 @@ int main(){
     ObjectCreator::createSpheres(sphere1, sphere2, sphere3, sphere4);
 
     //Create our 3 triangles
-//    Triangle* tri1;
-//    Triangle* tri2;
-//    Triangle* tri3;
-//    ObjectCreator::createTriangles(tri1, tri2, tri3);
+    Triangle* tri1;
+    Triangle* tri2;
+    Triangle* tri3;
+    ObjectCreator::createTriangles(tri1, tri2, tri3);
 
     vector<SceneObject*> objectArr;
     //Add spheres
@@ -127,9 +128,16 @@ int main(){
     objectArr.push_back(pBack);
     objectArr.push_back(pLeft);
     //Add triangles
-//    objectArr.push_back(tri1);
-//    objectArr.push_back(tri2);
-//    objectArr.push_back(tri3);
+    objectArr.push_back(tri1);
+    objectArr.push_back(tri2); //This is the only one showing up so far.
+    objectArr.push_back(tri3);
+
+    // ===== DELETE THIS TRIANGLE ======
+//    glm::vec3 vertex1(10, 5, 10);
+//    glm::vec3 vertex2(0, 0, 10);
+//    glm::vec3 vertex3(0, 10, 10);
+//    Triangle* testTriangle = new Triangle(vertex1, vertex2, vertex3, 212, 0, 174);
+//    objectArr.push_back(testTriangle);
 
     //Define our 3 point light sources
     glm::vec4 pointLight1(2, 13, 2, 1);

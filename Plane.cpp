@@ -1,6 +1,6 @@
 #include "Plane.h"
 
-Plane::Plane(glm::vec4 norm, glm::vec4 pt, glm::vec4 mi, glm::vec4 ma, long red, long green, long blue){
+Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red, long green, long blue){
     normal = norm;
     point = pt;
     min = mi;
@@ -21,14 +21,16 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::ve
     // If normal and camDir are perpendicular to each other, then their
     // dot product will be 0 and t will be undefined.
 
+    glm::vec3 camPMinusPt = glm::vec3(camPos) - glm::vec3(point);
+    double test2 = glm::dot(glm::vec3(normal), camPMinusPt);
+
+//    cout << "=======INSIDE PLANE========" << endl;
 //    cout << "\ncamPos: " << "[" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]" << endl;
 //    cout << "point: " << "[" << point.x << ", " << point.y << ", " << point.z << "]" << endl;
 //    cout << "normal: " << "[" << normal.x << ", " << normal.y << ", " << normal.z << "]" << endl;
 //    cout << "camDir: " << "[" << camDir.x << ", " << camDir.y << ", " << camDir.z << "]" << endl;
-    glm::vec3 test = glm::vec3(camPos) - glm::vec3(point);
-//    cout << "camPos - point = [" << test.x << ", " << test.y << ", " << test.z << "]" << endl;
-    double test2 = glm::dot(glm::vec3(normal), test);
-//    cout << "glm::dot(glm::vec3(normal), test) = " << test2 << endl;
+//    cout << "camPos - point = [" << camPMinusPt.x << ", " << camPMinusPt.y << ", " << camPMinusPt.z << "]" << endl;
+//    cout << "glm::dot(glm::vec3(normal), camPMinusPt) = " << test2 << endl;
 
     double numerator = (-1) * glm::dot(glm::vec3(normal), (glm::vec3(camPos) - glm::vec3(point)));
     double denominator = glm::dot(glm::vec3(normal), glm::vec3(camDir));
@@ -54,7 +56,7 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::ve
                 return false;
             } else { //Here, the ray is a clean hit
                 t = tIntersection;
-//                cout << "[SUCCESSFUL HIT] t = " << t << endl;
+//                cout << "[SUCCESSFUL PLANE HIT] t = " << t << endl;
                 return true;
             }
         }

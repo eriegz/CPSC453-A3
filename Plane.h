@@ -12,12 +12,12 @@ using namespace std;
 class Plane : public SceneObject{
 private:
     //glm::mat4* planeMatrix;
-    glm::vec4 normal, point, min, max;
+    glm::vec3 normal, point, min, max;
     long redC;
     long greenC;
     long blueC;
 public:
-    Plane(glm::vec4, glm::vec4, glm::vec4, glm::vec4, long, long, long);
+    Plane(glm::vec3, glm::vec3, glm::vec3, glm::vec3, long, long, long);
     bool isIntersected(glm::vec4, glm::vec3, double &, glm::vec3 &);
     void getIntersectionPoint(glm::vec4, glm::vec3, double, glm::vec3 &);
     void getColour(float &, float &, float &);

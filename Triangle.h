@@ -4,6 +4,8 @@
 #define GLM_SWIZZLE
 
 #include "SceneObject.h"
+#include "Plane.h"
+
 #include "glm/glm.hpp"
 
 #include <iostream>
