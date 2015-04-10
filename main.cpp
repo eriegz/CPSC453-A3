@@ -153,7 +153,7 @@ int main(){
 
     //Set up our image plane, and its bottom Left and top right coordinates
     RgbImage *finalImage = new RgbImage("../../../../A3/finalImage.bmp");
-    glm::vec4 bLeftImPlane(4.5, 2, -8, 1);
+    glm::vec4 bLeftImPlane(4.6, 2, -8, 1);
     glm::vec4 tRightImPlane(8.8, 8, -7, 1);
 
     //These are the main "go!" functions
