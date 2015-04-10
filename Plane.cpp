@@ -10,7 +10,7 @@ Plane::Plane(glm::vec4 norm, glm::vec4 pt, glm::vec4 mi, glm::vec4 ma, long red,
     blueC = blue;
 }
 
-bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double t, glm::vec3 &intersectionPoint){
+bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::vec3 &intersectionPoint){
     // If the viewing ray intersects the plane defined in this class's
     // private variables, there should exist some t for which:
     //
@@ -25,6 +25,10 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double t, glm::vec
 //    cout << "point: " << "[" << point.x << ", " << point.y << ", " << point.z << "]" << endl;
 //    cout << "normal: " << "[" << normal.x << ", " << normal.y << ", " << normal.z << "]" << endl;
 //    cout << "camDir: " << "[" << camDir.x << ", " << camDir.y << ", " << camDir.z << "]" << endl;
+    glm::vec3 test = glm::vec3(camPos) - glm::vec3(point);
+//    cout << "camPos - point = [" << test.x << ", " << test.y << ", " << test.z << "]" << endl;
+    double test2 = glm::dot(glm::vec3(normal), test);
+//    cout << "glm::dot(glm::vec3(normal), test) = " << test2 << endl;
 
     double numerator = (-1) * glm::dot(glm::vec3(normal), (glm::vec3(camPos) - glm::vec3(point)));
     double denominator = glm::dot(glm::vec3(normal), glm::vec3(camDir));
@@ -33,14 +37,6 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double t, glm::vec
         if(tIntersection > t){
             return false;
         } else {
-            /*
-            cout << "camPos.x = " << camPos.x << endl;
-            cout << "camPos.y = " << camPos.y << endl;
-            cout << "camPos.z = " << camPos.z << endl;
-            cout << "camDir.x = " << camDir.x << endl;
-            cout << "camDir.y = " << camDir.y << endl;
-            cout << "camDir.z = " << camDir.z << endl;
-            */
             getIntersectionPoint(camPos, camDir, tIntersection, intersectionPoint);
             if(intersectionPoint.x > max.x || intersectionPoint.x < min.x ||
                intersectionPoint.y > max.y || intersectionPoint.y < min.y ||
@@ -57,6 +53,8 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double t, glm::vec
 //                cout << "intersectionPoint.z = " << intersectionPoint.z << endl;
                 return false;
             } else { //Here, the ray is a clean hit
+                t = tIntersection;
+//                cout << "[SUCCESSFUL HIT] t = " << t << endl;
                 return true;
             }
         }
@@ -77,7 +75,8 @@ void Plane::getIntersectionPoint(glm::vec4 camP, glm::vec3 camD, double tInters,
     if(fabs(intersPoint.y - max.y) < 0.00001){ intersPoint.y = max.y; }
     if(fabs(intersPoint.z - max.z) < 0.00001){ intersPoint.z = max.z; }
 
-//    cout << "\ntInters = " << tInters << endl;
+//    cout << "\nInside Plane::getIntersectionPoint..." << endl;
+//    cout << "tInters = " << tInters << endl;
 //    cout << "intersPoint = (" << intersPoint.x << ", " << intersPoint.y << ", " << intersPoint.z << ")" << endl;
 //    cout << "camD.x = " << camD.x << endl;
 //    cout << "camD.y = " << camD.y << endl;

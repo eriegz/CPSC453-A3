@@ -34,19 +34,19 @@ void ObjectCreator::createScene(Plane *&pF, Plane *&pR, Plane *&pB, Plane *&pL){
 
 void ObjectCreator::createSpheres(Sphere *&sph1, Sphere *&sph2, Sphere *&sph3, Sphere *&sph4){
     { //Sphere1
-        glm::vec4 center(0.8, 2.5, 1.8, 1);
+        glm::vec4 center(0.0, 2.5, 1.8, 1);
         sph1 = new Sphere(center, 0.8, 95, 77, 104);
     }
     { //Sphere 2
-        glm::vec4 center(2.0, 7.2, 1.5, 1);
+        glm::vec4 center(0.0, 7.2, 1.5, 1);
         sph2 = new Sphere(center, 1.3, 246, 209, 111);
     }
     { //Sphere 3
-        glm::vec4 center(2.3, 3.0, 5.5, 1);
+        glm::vec4 center(0, 3.0, 5.5, 1);
         sph3 = new Sphere(center, 2.3, 230, 73, 95);
     }
     { //Sphere 4
-        glm::vec4 center(2.5, 7.6, 7.8, 1);
+        glm::vec4 center(0, 7.6, 7.8, 1);
         sph4 = new Sphere(center, 2.5, 169, 40, 74);
     }
 }
@@ -56,18 +56,18 @@ void ObjectCreator::createTriangles(Triangle *&t1, Triangle *&t2, Triangle *&t3)
         glm::vec4 vertex1(4.0, 1.2, 3.4, 1);
         glm::vec4 vertex2(3.5, 2.8, 4.5, 1);
         glm::vec4 vertex3(5.5, 1.5, 5.1, 1);
-        t1 = new Triangle(vertex1, vertex2, vertex3);
+        t1 = new Triangle(vertex1, vertex2, vertex3, 0, 240, 0);
     }
     { //Triangle 2
         glm::vec4 vertex1(4.0, 9.4, 1.2, 1);
         glm::vec4 vertex2(7.0, 9.8, 4.6, 1);
         glm::vec4 vertex3(5.0, 9.1, 4.7, 1);
-        t2 = new Triangle(vertex1, vertex2, vertex3);
+        t2 = new Triangle(vertex1, vertex2, vertex3, 0, 240, 0);
     }
     { //Triangle 3
         glm::vec4 vertex1(0, 0, 0, 1);
         glm::vec4 vertex2(0, 0, 0, 1);
         glm::vec4 vertex3(0, 0, 0, 1);
-        t3 = new Triangle(vertex1, vertex2, vertex3);
+        t3 = new Triangle(vertex1, vertex2, vertex3, 0, 240, 0);
     }
 }

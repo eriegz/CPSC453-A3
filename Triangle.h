@@ -12,9 +12,12 @@ using namespace std;
 class Triangle : public SceneObject{
 private:
     glm::vec4 vertex1, vertex2, vertex3;
+    long redC;
+    long greenC;
+    long blueC;
 public:
-    Triangle(glm::vec4, glm::vec4, glm::vec4);
-    bool isIntersected(glm::vec4, glm::vec3, double, glm::vec3 &);
+    Triangle(glm::vec4, glm::vec4, glm::vec4, long, long, long);
+    bool isIntersected(glm::vec4, glm::vec3, double &, glm::vec3 &);
     void getIntersectionPoint(glm::vec4, glm::vec3, double, glm::vec3 &);
     void getColour(float &, float &, float &);
 };

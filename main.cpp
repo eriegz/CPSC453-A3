@@ -44,6 +44,11 @@ void traversePixels(RgbImage *fImage, glm::vec4 bCorner, glm::vec4 tCorner,
     float myGreen = 0;
     float myBlue = 0;
 
+    //Because t will change with every intersection, each time it will get "reset"
+    double tCopy = t;
+    //And save our current lowest t
+    double currentLowestT = t;
+
     // Create vectors for the other two corners of the image plane to aid with computing
     // its world coordinates.
     glm::vec3 tLeft(tCorner.x, bCorner.y, tCorner.z);
@@ -56,33 +61,35 @@ void traversePixels(RgbImage *fImage, glm::vec4 bCorner, glm::vec4 tCorner,
     //rayDirection(0, 0, 0, 0);
     glm::vec4 pixelPosition(0, 0, 0, 1);
 
-    unsigned char myColour;
-
-    for(int i = 0/*135*/; i < myRows/*140*/; i++){
+    for(int i = 0/*33*/; i < myRows/*34*/; i++){
         double zOffset = ((double)i / (double)myRows) * zDistance;
-        for(int j = 0/*140*/; j < myCols/*145*/; j++){
+        for(int j = 0/*343*/; j < myCols/*344*/; j++){
             double yOffset = ((double)j / (double)myCols) * imWidth;
             double xOffset = ((double)i / (double)myRows) * imHeight;
             pixelPosition.x = bCorner.x + xOffset;
             pixelPosition.y = bCorner.y + yOffset;
             pixelPosition.z = bCorner.z + zOffset;
-            glm::vec4 rayDirection = glm::vec4(cPos) - glm::vec4(pixelPosition);
+
+            glm::vec4 rayDirection = glm::vec4(pixelPosition) - glm::vec4(cPos);
             glm::vec3 rayDir3 = glm::normalize(glm::vec3(rayDirection));
-//            cout << "Shooting ray (" << rayDir3.x << ", "
-//                 << rayDir3.y << ", " << rayDir3.z << ")"
-//                 << "          i = " << i << ", j = " << j << endl;
+
             for(vector<SceneObject>::size_type itr = 0; itr != oArr.size(); itr++){
-//                cout << "Before calling isIntersected(), t = " << t << endl;
+//                cout << "\nInside main..." << endl;
+//                cout << "t = " << t << endl;
+//                cout << "currentLowestT = " << currentLowestT << endl;
                 if(oArr[itr]->isIntersected(cPos, rayDir3, t, intPoint) == true){
-                    oArr[itr]->getColour(myRed, myGreen, myBlue);
-                    fImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
-                    break;
+//                    cout << "After isIntersected() is called, t = " << t << endl;
+                    if(t < currentLowestT){
+//                        cout << t << " is less than " << currentLowestT << "." << endl;
+                        oArr[itr]->getColour(myRed, myGreen, myBlue);
+                        fImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
+                        currentLowestT = t;
+                    }
                 }
+                t = tCopy; //Reset t
             }
-            //Set rayDirection through pixel
-            //fImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
+            currentLowestT = tCopy; //Reset current lowest t
         }
-        //cout << "Received colour " << (int)myColour << endl;
     }
     fImage->WriteBmpFile("../../../../A3/finalImage.bmp");
 }
@@ -130,42 +137,18 @@ int main(){
     glm::vec4 pointLight3(8, 15, 3, 1);
 
     //Define our camera position, direction, t value, and intersection
-    glm::vec4 cameraPosition(6.0, 5.0, -5.0, 1);
-    glm::vec4 cameraDirection(-0.471, 0, 0.882, 0); //Normalized
-    glm::vec3 cameraDirection3(cameraDirection);
+    glm::vec4 cameraPosition(7.8, 5.0, -12.3, 1);
+    glm::vec4 cameraDirection(-12, 0, 15, 0);
+    glm::vec3 cameraDirection3 = glm::normalize(glm::vec3(cameraDirection)); //Normalized
     double tValue = 40;
     glm::vec3 intersectionPoint(0, 0, 0);
 
     //Set up our image plane, and its bottom Left and top right coordinates
     RgbImage *finalImage = new RgbImage("../../../../A3/finalImage.bmp");
-    glm::vec4 bLeftImPlane(3, 2, -3, 1);
-    glm::vec4 tRightImPlane(7, 8, -2, 1);
+    glm::vec4 bLeftImPlane(4.8, 2, -8, 1);
+    glm::vec4 tRightImPlane(8.8, 8, -7, 1);
 
     //These are the main "go!" functions
     clearImage(finalImage);
     traversePixels(finalImage, bLeftImPlane, tRightImPlane, cameraPosition, tValue, intersectionPoint, objectArr);
-
-    //Iterate through our scene objects
-    //vector<SceneObject*>::iterator itr;
-
-    // ========== TEST SECTION ==============
-    //pBack->isIntersected(cameraPosition, cameraDirection3, tValue, intersectionPoint);
-    //pBack->isIntersected2(camera, cameraDir, tValue);
-//    glm::vec3 normalizationTest(5, 2, 6);
-//    glm::vec3 normalizedVector = glm::normalize(normalizationTest);
-//    cout << "normalizationTest = (" << normalizedVector.x << ", " << normalizedVector.y
-//         << ", " << normalizedVector.z << ")" << endl;
-
-    /*
-    glm::vec4 testSphereC(0, 5, 5, 1);
-    Sphere* testSphere = new Sphere(testSphereC, 2);
-    glm::vec4 testCameraPosition(0, 5, -5, 1);
-    glm::vec4 testCameraDirection(0, 0, 1, 0); //Normalized
-    testSphere->isIntersected(testCameraPosition, testCameraDirection, tValue, intersectionPoint);
-    cout << "intersectionPoint:" << endl
-         << "  " << intersectionPoint.x
-         << "  " << intersectionPoint.y
-         << "  " << intersectionPoint.z << endl;
-    //*/
-//    cout << "No immediately-visible problems." << endl;
 }

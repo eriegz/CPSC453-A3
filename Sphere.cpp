@@ -8,7 +8,7 @@ Sphere::Sphere(glm::vec4 cPos, double rad, long red, long green, long blue){
     blueC = blue;
 }
 
-bool Sphere::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double t, glm::vec3 &intersectionPoint){
+bool Sphere::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::vec3 &intersectionPoint){
     // d = camDir
     // D = Q - C = camPos - centerPosition
     // ||D||^2 = (magnitude of D)^2 = (glm::length(D))^2;
@@ -19,21 +19,28 @@ bool Sphere::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double t, glm::ve
     double r_2 = pow(radius, 2);
     double discriminant = d_D_2 - (magD_2 - r_2);
     if(discriminant > 0){
-        //cout << "Sphere and viewing ray have 2 intersections." << endl;
         double d_D = glm::dot(glm::vec3(camDir), D);
-        double temp_t_1 = (-1 * (d_D)) + sqrt(discriminant);
-        double temp_t_2 = (-1 * (d_D)) - sqrt(discriminant);
-        if(temp_t_1 < temp_t_2){ //We only want the intersection on the side facing the camera
-            t = temp_t_1;
+        double tIntersection_1 = (-1 * (d_D)) + sqrt(discriminant);
+        double tIntersection_2 = (-1 * (d_D)) - sqrt(discriminant);
+//        cout << "\nInside Sphere::isIntersected..." << endl;
+//        cout << "tIntersection_1 = " << tIntersection_1 << ", tIntersection_2 = " << tIntersection_2 << endl;
+        if(tIntersection_1 < tIntersection_2){ //We only want the intersection on the side facing the camera
+            getIntersectionPoint(camPos, camDir, tIntersection_1, intersectionPoint);
+            t = tIntersection_1;
+//            cout << "getIntersectionPoint(..., tIntersection_1) is called" << endl;
+//            cout << "t = " << t << endl;
         } else {
-            t = temp_t_2;
+            getIntersectionPoint(camPos, camDir, tIntersection_2, intersectionPoint);
+            t = tIntersection_2;
+            //cout << "getIntersectionPoint(..., tIntersection_2) is called" << endl;
+            //cout << "t = " << t << endl;
         }
-        getIntersectionPoint(camPos, camDir, t, intersectionPoint);
     } else {
         if(discriminant == 0){ //Only one intersection on the sphere
             double d_D = glm::dot(glm::vec3(camDir), D);
-            t = (-1 * (d_D));
-            getIntersectionPoint(camPos, camDir, t, intersectionPoint);
+            double tIntersection = (-1 * (d_D));
+            getIntersectionPoint(camPos, camDir, tIntersection, intersectionPoint);
+            t = tIntersection;
         } else { //discriminant < 0; no intersections
             return false;
         }
