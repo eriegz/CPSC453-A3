@@ -10,7 +10,14 @@ Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red,
     blueC = blue;
 }
 
-bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::vec3 &intersectionPoint){
+bool Plane::isIntersected(Environment *myEnv, glm::vec3 rayDir){
+    // Make local copies of everything first for simplicity.
+    // Store any values to be saved inside myEnv later.
+    glm::vec3 camPos = myEnv->camPosition;
+    double t = myEnv->tValue;
+    glm::vec3 intPt = myEnv->intersPoint;
+    glm::vec3 intNrm = myEnv->intersNorm;
+
     // If the viewing ray intersects the plane defined in this class's
     // private variables, there should exist some t for which:
     //
@@ -21,9 +28,6 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::ve
     // If normal and camDir are perpendicular to each other, then their
     // dot product will be 0 and t will be undefined.
 
-    glm::vec3 camPMinusPt = glm::vec3(camPos) - glm::vec3(point);
-    double test2 = glm::dot(glm::vec3(normal), camPMinusPt);
-
 //    cout << "=======INSIDE PLANE========" << endl;
 //    cout << "\ncamPos: " << "[" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]" << endl;
 //    cout << "point: " << "[" << point.x << ", " << point.y << ", " << point.z << "]" << endl;
@@ -33,30 +37,23 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::ve
 //    cout << "glm::dot(glm::vec3(normal), camPMinusPt) = " << test2 << endl;
 
     double numerator = (-1) * glm::dot(glm::vec3(normal), (glm::vec3(camPos) - glm::vec3(point)));
-    double denominator = glm::dot(glm::vec3(normal), glm::vec3(camDir));
+    double denominator = glm::dot(glm::vec3(normal), glm::vec3(rayDir));
     if(denominator != 0){
         double tIntersection = numerator / denominator;
         if(tIntersection > t){
             return false;
         } else {
-            getIntersectionPoint(camPos, camDir, tIntersection, intersectionPoint);
-            if(intersectionPoint.x > max.x || intersectionPoint.x < min.x ||
-               intersectionPoint.y > max.y || intersectionPoint.y < min.y ||
-               intersectionPoint.z > max.z || intersectionPoint.z < min.z){ //If it misses the plane
-//                cout << "denominator = " << denominator << endl;
-//                cout << "normal.x = " << normal.x << endl;
-//                cout << "normal.y = " << normal.y << endl;
-//                cout << "normal.z = " << normal.z << endl;
-//                cout << "camDir.x = " << camDir.x << endl;
-//                cout << "camDir.y = " << camDir.y << endl;
-//                cout << "camDir.z = " << camDir.z << endl;
-//                cout << "intersectionPoint.x = " << intersectionPoint.x << endl;
-//                cout << "intersectionPoint.y = " << intersectionPoint.y << endl;
-//                cout << "intersectionPoint.z = " << intersectionPoint.z << endl;
+            getIntersectionPoint(myEnv, tIntersection, rayDir);
+            if(myEnv->intersPoint.x > max.x || myEnv->intersPoint.x < min.x ||
+               myEnv->intersPoint.y > max.y || myEnv->intersPoint.y < min.y ||
+               myEnv->intersPoint.z > max.z || myEnv->intersPoint.z < min.z){ //If it misses the plane
                 return false;
             } else { //Here, the ray is a clean hit
-                t = tIntersection;
-//                cout << "[SUCCESSFUL PLANE HIT] t = " << t << endl;
+                myEnv->tValue = tIntersection;
+//                cout << "[SUCCESSFUL PLANE HIT] myEnv->tValue = " << myEnv->tValue << endl;
+                myEnv->intersNorm.x = normal.x;
+                myEnv->intersNorm.y = normal.y;
+                myEnv->intersNorm.z = normal.z;
                 return true;
             }
         }
@@ -65,27 +62,39 @@ bool Plane::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::ve
     }
 }
 
-void Plane::getIntersectionPoint(glm::vec4 camP, glm::vec3 camD, double tInters, glm::vec3 &intersPoint){
-    camD *= tInters;
+void Plane::getIntersectionPoint(Environment *myEnv, double tInt, glm::vec3 rayDir){
+    //glm::vec3 camP, glm::vec3 camD, double tInters, glm::vec3 &intersPoint
+    glm::vec3 camP = myEnv->camPosition;
 
-    intersPoint = glm::vec3(camP) + camD;
+//    cout << "rayDir = ["
+//         << rayDir.x << ", "
+//         << rayDir.y << ", "
+//         << rayDir.z << "]" << endl;
+
+    rayDir *= tInt;
+
+    myEnv->intersPoint = camP + rayDir;
+
+//    cout << "myEnv->camPosition = ["
+//         << myEnv->camPosition.x << ", "
+//         << myEnv->camPosition.y << ", "
+//         << myEnv->camPosition.z << "]" << endl;
+//    cout << "rayDir *= " << tInt << " = ["
+//         << rayDir.x << ", "
+//         << rayDir.y << ", "
+//         << rayDir.z << "]" << endl;
+//    cout << "myEnv->intersPoint = ["
+//         << myEnv->intersPoint.x << ", "
+//         << myEnv->intersPoint.y << ", "
+//         << myEnv->intersPoint.z << "]" << endl;
+
     // C++ has trouble with floating point arithmetic, so I have to pick up the slack.
-    if(fabs(intersPoint.x) < 0.00001){ intersPoint.x = 0; }
-    if(fabs(intersPoint.y) < 0.00001){ intersPoint.y = 0; }
-    if(fabs(intersPoint.z) < 0.00001){ intersPoint.z = 0; }
-    if(fabs(intersPoint.x - max.x) < 0.00001){ intersPoint.x = max.x; }
-    if(fabs(intersPoint.y - max.y) < 0.00001){ intersPoint.y = max.y; }
-    if(fabs(intersPoint.z - max.z) < 0.00001){ intersPoint.z = max.z; }
-
-//    cout << "\nInside Plane::getIntersectionPoint..." << endl;
-//    cout << "tInters = " << tInters << endl;
-//    cout << "intersPoint = (" << intersPoint.x << ", " << intersPoint.y << ", " << intersPoint.z << ")" << endl;
-//    cout << "camD.x = " << camD.x << endl;
-//    cout << "camD.y = " << camD.y << endl;
-//    cout << "camD.z = " << camD.z << endl;
-//    cout << "camP.x = " << camP.x << endl;
-//    cout << "camP.y = " << camP.y << endl;
-//    cout << "camP.z = " << camP.z << endl;
+    if(fabs(myEnv->intersPoint.x) < 0.00001){ myEnv->intersPoint.x = 0; }
+    if(fabs(myEnv->intersPoint.y) < 0.00001){ myEnv->intersPoint.y = 0; }
+    if(fabs(myEnv->intersPoint.z) < 0.00001){ myEnv->intersPoint.z = 0; }
+    if(fabs(myEnv->intersPoint.x - max.x) < 0.00001){ myEnv->intersPoint.x = max.x; }
+    if(fabs(myEnv->intersPoint.y - max.y) < 0.00001){ myEnv->intersPoint.y = max.y; }
+    if(fabs(myEnv->intersPoint.z - max.z) < 0.00001){ myEnv->intersPoint.z = max.z; }
 }
 
 void Plane::getColour(float &myR, float &myG, float &myB){

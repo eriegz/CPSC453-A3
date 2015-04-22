@@ -62,12 +62,12 @@ void ObjectCreator::createTriangles(Triangle *&t1, Triangle *&t2, Triangle *&t3)
         glm::vec3 vertex1(7.1, 4.8, 5.1);
         glm::vec3 vertex2(7.5, 2.2, 8);
         glm::vec3 vertex3(5.3, 5.1, 8.2);
-        t2 = new Triangle(vertex1, vertex2, vertex3, 163, 0, 134);
+        t2 = new Triangle(vertex1, vertex2, vertex3, 110, 0, 91);
     }
     { //Triangle 3
         glm::vec3 vertex1(9, 5.5, 6.5);
         glm::vec3 vertex2(7.1, 4.8, 5.1);
         glm::vec3 vertex3(5.3, 5.1, 8.2);
-        t3 = new Triangle(vertex1, vertex2, vertex3, 110, 0, 91);
+        t3 = new Triangle(vertex1, vertex2, vertex3, 163, 0, 134);
     }
 }

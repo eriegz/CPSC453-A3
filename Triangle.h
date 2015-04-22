@@ -19,8 +19,8 @@ private:
     long blueC;
 public:
     Triangle(glm::vec3, glm::vec3, glm::vec3, long, long, long);
-    bool isIntersected(glm::vec4, glm::vec3, double &, glm::vec3 &);
-    void getIntersectionPoint(glm::vec4, glm::vec3, double, glm::vec3 &);
+    bool isIntersected(Environment*, glm::vec3);
+    void getIntersectionPoint(glm::vec3, glm::vec3, double, glm::vec3 &);
     void getColour(float &, float &, float &);
 };
 

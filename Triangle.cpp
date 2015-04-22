@@ -9,7 +9,7 @@ Triangle::Triangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, long red, long gree
     blueC = blue;
 }
 
-bool Triangle::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm::vec3 &intersectionPoint){
+bool Triangle::isIntersected(Environment *myEnv, glm::vec3 rayDir){
     // For this algorithm, first we will calculate the ray's intersection with
     // the plane which the triangle sits in to get a point, P1. We can then
     // see if this point is within the triangle limits.
@@ -42,8 +42,9 @@ bool Triangle::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm:
     glm::vec3 tempMax(999999, 999999, 999999);
     Plane::Plane tempPlane(n_norm, vertex2, tempMin, tempMax, 0, 0, 0);
 
-    if(tempPlane.isIntersected(camPos, camDir, t, intersectionPoint) == true){
-        glm::vec3 w = intersectionPoint - vertex1;
+    if(tempPlane.isIntersected(myEnv, rayDir) == true){
+//        cout << "Ray intersects with the plane the triangle sits in." << endl;
+        glm::vec3 w = myEnv->intersPoint - vertex1;
         if(fabs(w.x) < 0.00001){ w.x = 0; }
         if(fabs(w.y) < 0.00001){ w.y = 0; }
         if(fabs(w.z) < 0.00001){ w.z = 0; }
@@ -79,7 +80,9 @@ bool Triangle::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm:
 //        cout << "t_param = " << t_param << endl;
 
         if(s_param >= 0 && t_param >= 0 && (s_param + t_param) <= 1){ //Clean hit
+//            cout << "Clean hit inside triangle." << endl;
             return true;
+            //Don't need to set the intersection normal here, b/c Plane::isIntersected() already did that
         } else { //Not in the bounds of the triangle
             return false;
         }
@@ -88,9 +91,9 @@ bool Triangle::isIntersected(glm::vec4 camPos, glm::vec3 camDir, double &t, glm:
     }
 }
 
-void Triangle::getIntersectionPoint(glm::vec4 camP, glm::vec3 camD, double tInters, glm::vec3 &intersPoint){
-    camD *= tInters;
-    intersPoint = glm::vec3(camP) + camD;
+void Triangle::getIntersectionPoint(glm::vec3 camP, glm::vec3 camD, double tInters, glm::vec3 &intersPoint){
+//    camD *= tInters;
+//    intersPoint = glm::vec3(camP) + camD;
 }
 
 void Triangle::getColour(float &myR, float &myG, float &myB){
