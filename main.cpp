@@ -18,16 +18,25 @@ using namespace std;
 
 void initializeMyEnvironment(Environment *myE){
     //Camera, intersection point
-    myE->camPosition = glm::vec3(7.8, 5.0, -12.3);;
-//    myE->camDirection = glm::vec3(-12, 0, 15);
+    myE->camPosition = glm::vec3(7.8, 5.0, -12.3);
     myE->intersPoint = glm::vec3(0, 0, 0);
     myE->intersNorm = glm::vec3(0, 0, 0);
     myE->tValue = 40;
+    myE->tValueMax = 40;
 
     //3 point light sources
-    myE->pointLight1 = glm::vec3(13, 2, 2);
-    myE->pointLight2 = glm::vec3(14, 7, 9);
-    myE->pointLight3 = glm::vec3(15, 8, 3);
+    myE->pointLight1 = glm::vec3(15, 2, 2); //Front left
+    myE->pointLight2 = glm::vec3(17, 6, 0); //Front right
+    myE->pointLight3 = glm::vec3(16, 5, 6); //Back right
+    myE->pointLight4 = glm::vec3(14, 2, 7); //Back left
+    myE->pointLight5 = glm::vec3(15, 4, 4); //Inner Front left
+    myE->pointLight6 = glm::vec3(17, 4, 2); //Inner Front right
+    myE->pointLight7 = glm::vec3(16, 3, 4); //Inner Back right
+    myE->pointLight8 = glm::vec3(14, 4, 5); //Inner Back left
+    myE->pointLight9 = glm::vec3(15, 5, 5);  //Inner inner Front left
+    myE->pointLight10 = glm::vec3(17, 3, 3); //Inner inner Front right
+    myE->pointLight11 = glm::vec3(16, 2, 3); //Inner inner Back right
+    myE->pointLight12 = glm::vec3(14, 5, 4); //Inner inner Back left
 
     //Image plane
     myE->finalImage = new RgbImage("../../../../A3/finalImage.bmp");
@@ -35,8 +44,43 @@ void initializeMyEnvironment(Environment *myE){
     myE->topRightImagePlane = glm::vec3(8.8, 8, -7);
 }
 
-void initializeMyObjects(){
+void initializeMyObjects(vector<SceneObject*> &oA){
+    //Create the floor and walls
+    Plane* pFloor;
+    Plane* pRight;
+    Plane* pBack;
+    Plane* pLeft;
+    ObjectCreator::createScene(pFloor, pRight, pBack, pLeft);
 
+    //Create our 4 spheres
+    Sphere* sphere1;
+    Sphere* sphere2;
+    Sphere* sphere3;
+    Sphere* sphere4;
+    ObjectCreator::createSpheres(sphere1, sphere2, sphere3, sphere4);
+
+    //Create our 3 triangles
+    Triangle* tri1;
+    Triangle* tri2;
+    Triangle* tri3;
+    Triangle* tri4;
+    ObjectCreator::createTriangles(tri1, tri2, tri3, tri4);
+
+    //Add spheres
+    oA.push_back(sphere1);
+    oA.push_back(sphere2);
+    oA.push_back(sphere3);
+    oA.push_back(sphere4);
+    //Add planes
+    oA.push_back(pFloor);
+    oA.push_back(pRight);
+    oA.push_back(pBack);
+    oA.push_back(pLeft);
+    //Add triangles
+    oA.push_back(tri1);
+    oA.push_back(tri2);
+    oA.push_back(tri3);
+    oA.push_back(tri4);
 }
 
 void clearImage(RgbImage *fImage){
@@ -65,7 +109,7 @@ void clearImage(RgbImage *fImage){
 void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     int myRows = myEnv->finalImage->GetNumRows();
     int myCols = myEnv->finalImage->GetNumCols();
-    //For working with pixel colours:
+    //For shading
     float myRed = 0;
     float myGreen = 0;
     float myBlue = 0;
@@ -76,6 +120,7 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     double currentLowestT = tCopy;
 
     // Make local copies of the image coordinates for simplicity
+    // (Otherwise the names are too long)
     glm::vec3 tCorner = myEnv->topRightImagePlane;
     glm::vec3 bCorner = myEnv->bottomLeftImagePlane;
     glm::vec3 tLeft(tCorner.x, bCorner.y, tCorner.z); //Then a vec3 for one more corner, to help
@@ -88,11 +133,12 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     glm::vec3 pixelPosition(0, 0, 0);
 
     //Store the normal of our ray intersection
-    glm::vec3 intersNormal(0, 0, 0);
+    //glm::vec3 intersNormal(0, 0, 0);
 
-    for(int i = 0/*712*/; i < myRows/*713*/; i++){
+    for(int i = 0/*632*/; i < myRows/*633*/; i++){
         double zOffset = ((double)i / (double)myRows) * zDistance;
-        for(int j = 0/*600*/; j < myCols/*601*/; j++){
+        for(int j = 0/*596*/; j < myCols/*598*/; j++){
+//            cout << "\nPIXEL whatever ============\n" << endl;
             double yOffset = ((double)j / (double)myCols) * imWidth;
             double xOffset = ((double)i / (double)myRows) * imHeight;
             pixelPosition.x = bCorner.x + xOffset;
@@ -102,24 +148,33 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
             glm::vec3 rayDirection = pixelPosition - myEnv->camPosition;
             glm::vec3 rayDir3 = glm::normalize(rayDirection);
 
+            vector<SceneObject>::size_type closestObject = 0; //Stores closest object to camera
+            bool containsIntersection = false;
+
+            // intersPoint gets set no matter what, even if the new intersection is farther away
+            // than an older one. If this happens, we want to revert intersPoint back to its
+            // previous value.
+            glm::vec3 closestIntersPt = myEnv->intersPoint;
+
             for(vector<SceneObject>::size_type itr = 0; itr != oArr.size(); itr++){
-//                cout << "\nInside main..." << endl;
-//                cout << "t = " << t << endl;
-//                cout << "currentLowestT = " << currentLowestT << endl;
                 if(oArr[itr]->isIntersected(myEnv, rayDir3) == true){
-//                    cout << "============SUCCESSFUL INTERSECTION============" << endl;
-//                    cout << "After isIntersected() is called, myEnv->tValue = " << myEnv->tValue << endl;
-//                    cout << "And currentLowestT = " << currentLowestT << endl;
+                    containsIntersection = true;
                     if(myEnv->tValue < currentLowestT){
-//                        cout << myEnv->tValue << " is less than " << currentLowestT << "." << endl;
-                        oArr[itr]->getColour(myRed, myGreen, myBlue);
-//                        Shading::computeShading(intersPoint, intersNormal, pointLight1, pointLight2, pointLight3,
-//                                                oArr, myRed, myGreen, myBlue);
-                        myEnv->finalImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
                         currentLowestT = myEnv->tValue;
+                        closestIntersPt = myEnv->intersPoint;
+                        closestObject = itr;
+                    }
+                    if(myEnv->tValue > currentLowestT){
+                        myEnv->tValue = currentLowestT;
+                        myEnv->intersPoint = closestIntersPt;
                     }
                 }
-                myEnv->tValue = tCopy; //Reset t
+                //myEnv->tValue = tCopy; //Reset t
+            }
+            if(containsIntersection){ //Set the pixel colour of the closest intersected object, if any
+                oArr[closestObject]->getColour(myRed, myGreen, myBlue);
+                Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue);
+                myEnv->finalImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
             }
             currentLowestT = tCopy; //Reset current lowest t
         }
@@ -128,60 +183,14 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
 }
 
 int main(){
+    //Create an Environment struct
     Environment *myEnvironment = new Environment;
     initializeMyEnvironment(myEnvironment);
-    initializeMyObjects();
 
-    //Create the floor and walls
-    Plane* pFloor;
-    Plane* pRight;
-    Plane* pBack;
-    Plane* pLeft;
-    ObjectCreator::createScene(pFloor, pRight, pBack, pLeft);
-
-    //Create our 4 spheres
-    Sphere* sphere1;
-    Sphere* sphere2;
-    Sphere* sphere3;
-    Sphere* sphere4;
-    ObjectCreator::createSpheres(sphere1, sphere2, sphere3, sphere4);
-
-    //Create our 3 triangles
-    Triangle* tri1;
-    Triangle* tri2;
-    Triangle* tri3;
-    ObjectCreator::createTriangles(tri1, tri2, tri3);
-
+    //Create our object array
     vector<SceneObject*> objectArr;
-    //Add spheres
-    objectArr.push_back(sphere1);
-    objectArr.push_back(sphere2);
-    objectArr.push_back(sphere3);
-    objectArr.push_back(sphere4);
-    //Add planes
-    objectArr.push_back(pFloor);
-    objectArr.push_back(pRight);
-    objectArr.push_back(pBack);
-    objectArr.push_back(pLeft);
-    //Add triangles
-    objectArr.push_back(tri1);
-    objectArr.push_back(tri2);
-    objectArr.push_back(tri3);
+    initializeMyObjects(objectArr);
 
-//    //Define our camera position, direction, t value, and intersection
-//    glm::vec3 cameraPosition(7.8, 5.0, -12.3);
-//    glm::vec3 cameraDirection(-12, 0, 15);
-//    glm::vec3 cameraDirection3 = glm::normalize(glm::vec3(cameraDirection)); //Normalized
-//    double tValue = 40;
-//    glm::vec3 intersectionPoint(0, 0, 0);
-
-//    //Set up our image plane, and its bottom Left and top right coordinates
-//    RgbImage *finalImage = new RgbImage("../../../../A3/finalImage.bmp");
-//    glm::vec3 bLeftImPlane(4.6, 2, -8);
-//    glm::vec3 tRightImPlane(8.8, 8, -7);
-
-    //These are the main "go!" functions
     clearImage(myEnvironment->finalImage);
     traversePixels(myEnvironment, objectArr);
-    //traversePixels(finalImage, bLeftImPlane, tRightImPlane, cameraPosition, tValue, intersectionPoint, objectArr);
 }

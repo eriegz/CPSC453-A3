@@ -9,17 +9,11 @@ Sphere::Sphere(glm::vec4 cPos, double rad, long red, long green, long blue){
 }
 
 bool Sphere::isIntersected(Environment *myEnv, glm::vec3 rayDir){
-    // Make local copies of everything because shut up
-    glm::vec3 camPos = myEnv->camPosition;
-    double t = myEnv->tValue;
-    glm::vec3 intPt = myEnv->intersPoint;
-    glm::vec3 intNrm = myEnv->intersNorm;
-
     // d = camDir
     // D = Q - C = camPos - centerPosition
     // ||D||^2 = (magnitude of D)^2 = (glm::length(D))^2;
     //
-    glm::vec3 D = glm::vec3(camPos) - glm::vec3(centerPosition);
+    glm::vec3 D = glm::vec3(myEnv->camPosition) - glm::vec3(centerPosition);
     double d_D_2 = pow(glm::dot(glm::vec3(rayDir), D), 2);
     double magD_2 = pow(glm::length(D), 2);
     double r_2 = pow(radius, 2);
@@ -28,39 +22,55 @@ bool Sphere::isIntersected(Environment *myEnv, glm::vec3 rayDir){
         double d_D = glm::dot(glm::vec3(rayDir), D);
         double tIntersection_1 = (-1 * (d_D)) + sqrt(discriminant);
         double tIntersection_2 = (-1 * (d_D)) - sqrt(discriminant);
+
 //        cout << "\nInside Sphere::isIntersected..." << endl;
-//        cout << "tIntersection_1 = " << tIntersection_1 << ", tIntersection_2 = " << tIntersection_2 << endl;
-        if(tIntersection_1 < tIntersection_2){ //We only want the intersection on the side facing the camera
-            getIntersectionPoint(camPos, rayDir, tIntersection_1, intPt);
+//        cout << "myEnv->camPosition = ["
+//             << myEnv->camPosition.x << ", "
+//             << myEnv->camPosition.y << ", "
+//             << myEnv->camPosition.z << "]" << endl;
+//            cout << "rayDir = "
+//                 << rayDir.x << ", "
+//                 << rayDir.y << ", "
+//                 << rayDir.z << "]" << endl;
+//        cout << "tIntersection_1 = " << tIntersection_1 << ", tIntersection_2 = " << tIntersection_2 << endl;// If both numbers are zero, or negative, return false
+
+        if(fabs(tIntersection_1) < 0.001 && fabs(tIntersection_2) < 0.001) return false;    //Both zero
+        if(fabs(tIntersection_1) < 0.001 && tIntersection_2 < -0.001) return false;         //1st is 0, 2nd is neg
+        if(tIntersection_1 < -0.001 && fabs(tIntersection_2) < 0.001) return false;         //1st is neg, 2nd is 0
+        if(tIntersection_1 < -0.001 && tIntersection_2 < -0.001) return false;              //Both negative
+
+        // Next, if both numbers are positive, use the smaller one
+        if(tIntersection_1 > 0.001 && tIntersection_2 > 0.001){
+            if(tIntersection_1 < tIntersection_2){
+                getIntersectionPoint(myEnv, tIntersection_1, rayDir);
+                myEnv->tValue = tIntersection_1;
+            } else {
+                getIntersectionPoint(myEnv, tIntersection_2, rayDir);
+                myEnv->tValue = tIntersection_2;
+            }
+        } else
+        // Next, if either of the numbers is positive use it
+        if(tIntersection_1 > 0.001){
+            getIntersectionPoint(myEnv, tIntersection_1, rayDir);
             myEnv->tValue = tIntersection_1;
-//            cout << "getIntersectionPoint(..., tIntersection_1) is called" << endl;
-//            cout << "t = " << t << endl;
         } else {
-            getIntersectionPoint(camPos, rayDir, tIntersection_2, intPt);
-            myEnv->tValue = tIntersection_2;
-            //cout << "getIntersectionPoint(..., tIntersection_2) is called" << endl;
-            //cout << "t = " << t << endl;
+            if(tIntersection_2 > 0.001){
+                getIntersectionPoint(myEnv, tIntersection_2, rayDir);
+                myEnv->tValue = tIntersection_2;
+            }
         }
-    } else {
-        if(discriminant == 0){ //Only one intersection on the sphere
-            double d_D = glm::dot(glm::vec3(rayDir), D);
-            double tIntersection = (-1 * (d_D));
-            getIntersectionPoint(camPos, rayDir, tIntersection, intPt);
-            myEnv->tValue = tIntersection;
-        } else { //discriminant < 0; no intersections
-            return false;
-        }
-    }
-    glm::vec3 tempNorm = intPt - glm::vec3(centerPosition);
-    myEnv->intersNorm.x = tempNorm.x;
-    myEnv->intersNorm.y = tempNorm.y;
-    myEnv->intersNorm.z = tempNorm.z;
+    } else return false;
+//    glm::vec3 tempNorm = myEnv->intersPoint - glm::vec3(centerPosition);
+//    myEnv->intersNorm.x = tempNorm.x;
+//    myEnv->intersNorm.y = tempNorm.y;
+//    myEnv->intersNorm.z = tempNorm.z;
     return true;
 }
 
-void Sphere::getIntersectionPoint(glm::vec3 camP, glm::vec3 camD, double tInters, glm::vec3 &intersPoint){
-    camD *= tInters;
-    intersPoint = glm::vec3(camP) + camD;
+void Sphere::getIntersectionPoint(Environment *myEnv, double tInt, glm::vec3 rayDir){
+    rayDir *= tInt;
+    myEnv->intersPoint = myEnv->camPosition + rayDir;
+//    cout << "myEnv->intersPoint = [" << myEnv->intersPoint.x << ", " << myEnv->intersPoint.y << ", " << myEnv->intersPoint.z << "]" << endl;
 }
 
 void Sphere::getColour(float &myR, float &myG, float &myB){

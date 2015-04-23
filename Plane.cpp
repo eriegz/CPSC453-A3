@@ -11,13 +11,6 @@ Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red,
 }
 
 bool Plane::isIntersected(Environment *myEnv, glm::vec3 rayDir){
-    // Make local copies of everything first for simplicity.
-    // Store any values to be saved inside myEnv later.
-    glm::vec3 camPos = myEnv->camPosition;
-    double t = myEnv->tValue;
-    glm::vec3 intPt = myEnv->intersPoint;
-    glm::vec3 intNrm = myEnv->intersNorm;
-
     // If the viewing ray intersects the plane defined in this class's
     // private variables, there should exist some t for which:
     //
@@ -28,25 +21,33 @@ bool Plane::isIntersected(Environment *myEnv, glm::vec3 rayDir){
     // If normal and camDir are perpendicular to each other, then their
     // dot product will be 0 and t will be undefined.
 
-//    cout << "=======INSIDE PLANE========" << endl;
-//    cout << "\ncamPos: " << "[" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]" << endl;
-//    cout << "point: " << "[" << point.x << ", " << point.y << ", " << point.z << "]" << endl;
-//    cout << "normal: " << "[" << normal.x << ", " << normal.y << ", " << normal.z << "]" << endl;
-//    cout << "camDir: " << "[" << camDir.x << ", " << camDir.y << ", " << camDir.z << "]" << endl;
-//    cout << "camPos - point = [" << camPMinusPt.x << ", " << camPMinusPt.y << ", " << camPMinusPt.z << "]" << endl;
-//    cout << "glm::dot(glm::vec3(normal), camPMinusPt) = " << test2 << endl;
+//    cout << "\nInside Plane," << endl;
+//    cout << "myEnv->camPosition = ["
+//         << myEnv->camPosition.x << ", "
+//         << myEnv->camPosition.y << ", "
+//         << myEnv->camPosition.z << "]" << endl;
+//    cout << "rayDir = "
+//         << rayDir.x << ", "
+//         << rayDir.y << ", "
+//         << rayDir.z << "]" << endl;
 
-    double numerator = (-1) * glm::dot(glm::vec3(normal), (glm::vec3(camPos) - glm::vec3(point)));
+    double numerator = (-1) * glm::dot(glm::vec3(normal), (glm::vec3(myEnv->camPosition) - glm::vec3(point)));
     double denominator = glm::dot(glm::vec3(normal), glm::vec3(rayDir));
     if(denominator != 0){
         double tIntersection = numerator / denominator;
-        if(tIntersection > t){
+//        cout << "tIntersection = " << tIntersection << endl;
+//        cout << "myEnv->tValue = " << myEnv->tValue << endl;
+        if(tIntersection > myEnv->tValueMax || tIntersection < 0 || fabs(tIntersection) < 0.0001){ //If it's too far, or behind the camera
             return false;
         } else {
+            // Because intersPoint gets set with every new intersection calculation, we want to be able
+            // to restore the previous intersection point if the new one is without the limits of the plane.
+            glm::vec3 intersPoint_backup = myEnv->intersPoint;
             getIntersectionPoint(myEnv, tIntersection, rayDir);
             if(myEnv->intersPoint.x > max.x || myEnv->intersPoint.x < min.x ||
                myEnv->intersPoint.y > max.y || myEnv->intersPoint.y < min.y ||
                myEnv->intersPoint.z > max.z || myEnv->intersPoint.z < min.z){ //If it misses the plane
+                myEnv->intersPoint = intersPoint_backup;
                 return false;
             } else { //Here, the ray is a clean hit
                 myEnv->tValue = tIntersection;
@@ -63,26 +64,9 @@ bool Plane::isIntersected(Environment *myEnv, glm::vec3 rayDir){
 }
 
 void Plane::getIntersectionPoint(Environment *myEnv, double tInt, glm::vec3 rayDir){
-    //glm::vec3 camP, glm::vec3 camD, double tInters, glm::vec3 &intersPoint
-    glm::vec3 camP = myEnv->camPosition;
-
-//    cout << "rayDir = ["
-//         << rayDir.x << ", "
-//         << rayDir.y << ", "
-//         << rayDir.z << "]" << endl;
-
+//    cout << "tInt = " << tInt << endl;
     rayDir *= tInt;
-
-    myEnv->intersPoint = camP + rayDir;
-
-//    cout << "myEnv->camPosition = ["
-//         << myEnv->camPosition.x << ", "
-//         << myEnv->camPosition.y << ", "
-//         << myEnv->camPosition.z << "]" << endl;
-//    cout << "rayDir *= " << tInt << " = ["
-//         << rayDir.x << ", "
-//         << rayDir.y << ", "
-//         << rayDir.z << "]" << endl;
+    myEnv->intersPoint = myEnv->camPosition + rayDir;
 //    cout << "myEnv->intersPoint = ["
 //         << myEnv->intersPoint.x << ", "
 //         << myEnv->intersPoint.y << ", "

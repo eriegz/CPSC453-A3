@@ -9,7 +9,7 @@ class ObjectCreator{
 public:
     void static createScene(Plane *&, Plane *&, Plane *&, Plane *&);
     void static createSpheres(Sphere *&, Sphere *&, Sphere *&, Sphere *&);
-    void static createTriangles(Triangle *&, Triangle *&, Triangle *&);
+    void static createTriangles(Triangle *&, Triangle *&, Triangle *&, Triangle *&);
 };
 
 #endif // OBJECTCREATOR_H
