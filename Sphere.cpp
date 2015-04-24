@@ -34,13 +34,13 @@ bool Sphere::isIntersected(Environment *myEnv, glm::vec3 rayDir){
 //                 << rayDir.z << "]" << endl;
 //        cout << "tIntersection_1 = " << tIntersection_1 << ", tIntersection_2 = " << tIntersection_2 << endl;// If both numbers are zero, or negative, return false
 
-        if(fabs(tIntersection_1) < 0.001 && fabs(tIntersection_2) < 0.001) return false;    //Both zero
-        if(fabs(tIntersection_1) < 0.001 && tIntersection_2 < -0.001) return false;         //1st is 0, 2nd is neg
-        if(tIntersection_1 < -0.001 && fabs(tIntersection_2) < 0.001) return false;         //1st is neg, 2nd is 0
-        if(tIntersection_1 < -0.001 && tIntersection_2 < -0.001) return false;              //Both negative
+        if(fabs(tIntersection_1) < 0.01 && fabs(tIntersection_2) < 0.01) return false;    //Both zero
+        if(fabs(tIntersection_1) < 0.01 && tIntersection_2 < -0.01) return false;         //1st is 0, 2nd is neg
+        if(tIntersection_1 < -0.01 && fabs(tIntersection_2) < 0.01) return false;         //1st is neg, 2nd is 0
+        if(tIntersection_1 < -0.01 && tIntersection_2 < -0.01) return false;              //Both negative
 
         // Next, if both numbers are positive, use the smaller one
-        if(tIntersection_1 > 0.001 && tIntersection_2 > 0.001){
+        if(tIntersection_1 > 0.01 && tIntersection_2 > 0.01){
             if(tIntersection_1 < tIntersection_2){
                 getIntersectionPoint(myEnv, tIntersection_1, rayDir);
                 myEnv->tValue = tIntersection_1;
@@ -50,11 +50,11 @@ bool Sphere::isIntersected(Environment *myEnv, glm::vec3 rayDir){
             }
         } else
         // Next, if either of the numbers is positive use it
-        if(tIntersection_1 > 0.001){
+        if(tIntersection_1 > 0.01){
             getIntersectionPoint(myEnv, tIntersection_1, rayDir);
             myEnv->tValue = tIntersection_1;
         } else {
-            if(tIntersection_2 > 0.001){
+            if(tIntersection_2 > 0.01){
                 getIntersectionPoint(myEnv, tIntersection_2, rayDir);
                 myEnv->tValue = tIntersection_2;
             }
