@@ -38,7 +38,7 @@ void initializeMyEnvironment(Environment *myE){
     myE->pointLight11 = glm::vec3(16, 2, 3); //Inner inner Back right
     myE->pointLight12 = glm::vec3(14, 5, 4); //Inner inner Back left
 
-    //Image plane
+    //Define our image plane (a.k.a. world window), and our pixel map
     myE->finalImage = new RgbImage("../../../../A3/finalImage.bmp");
     myE->bottomLeftImagePlane = glm::vec3(4.6, 2, -8);
     myE->topRightImagePlane = glm::vec3(8.8, 8, -7);
