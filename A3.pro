@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     RgbImage.cpp \
     ObjectCreator.cpp \
     Shading.cpp \
-    Environment.cpp
+    Environment.cpp \
+    Reflection.cpp
 
 HEADERS  += SceneObject.h \
     Sphere.h \
@@ -28,4 +29,5 @@ HEADERS  += SceneObject.h \
     RgbImage.h \
     ObjectCreator.h \
     Shading.h \
-    Environment.h
+    Environment.h \
+    Reflection.h

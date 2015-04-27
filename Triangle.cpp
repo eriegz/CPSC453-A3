@@ -1,12 +1,13 @@
 #include "Triangle.h"
 
-Triangle::Triangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, long red, long green, long blue){
+Triangle::Triangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, long red, long green, long blue, double kS){
     vertex1 = v1;
     vertex2 = v2;
     vertex3 = v3;
     redC = red;
     greenC = green;
     blueC = blue;
+    kSpecular = kS;
 }
 
 bool Triangle::isIntersected(Environment *myEnv, glm::vec3 rayDir){
@@ -40,7 +41,7 @@ bool Triangle::isIntersected(Environment *myEnv, glm::vec3 rayDir){
 
     glm::vec3 tempMin(-999999, -999999, -999999); //Simulating an infinite plane
     glm::vec3 tempMax(999999, 999999, 999999);
-    Plane::Plane tempPlane(n_norm, vertex2, tempMin, tempMax, 0, 0, 0);
+    Plane::Plane tempPlane(n_norm, vertex2, tempMin, tempMax, 0, 0, 0, 0);
 
 //    cout << "u = [" << u.x << ", " << u.y << ", " << u.z << "]" << endl;
 //    cout << "v = [" << v.x << ", " << v.y << ", " << v.z << "]" << endl;

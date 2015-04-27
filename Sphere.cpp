@@ -1,11 +1,12 @@
 #include "Sphere.h"
 
-Sphere::Sphere(glm::vec4 cPos, double rad, long red, long green, long blue){
+Sphere::Sphere(glm::vec4 cPos, double rad, long red, long green, long blue, double kS){
     centerPosition = cPos;
     radius = rad;
     redC = red;
     greenC = green;
     blueC = blue;
+    kSpecular = kS;
 }
 
 bool Sphere::isIntersected(Environment *myEnv, glm::vec3 rayDir){
@@ -23,21 +24,17 @@ bool Sphere::isIntersected(Environment *myEnv, glm::vec3 rayDir){
         double tIntersection_1 = (-1 * (d_D)) + sqrt(discriminant);
         double tIntersection_2 = (-1 * (d_D)) - sqrt(discriminant);
 
-//        cout << "\nInside Sphere::isIntersected..." << endl;
-//        cout << "myEnv->camPosition = ["
-//             << myEnv->camPosition.x << ", "
-//             << myEnv->camPosition.y << ", "
-//             << myEnv->camPosition.z << "]" << endl;
-//            cout << "rayDir = "
-//                 << rayDir.x << ", "
-//                 << rayDir.y << ", "
-//                 << rayDir.z << "]" << endl;
-//        cout << "tIntersection_1 = " << tIntersection_1 << ", tIntersection_2 = " << tIntersection_2 << endl;// If both numbers are zero, or negative, return false
+        if((fabs(tIntersection_1) < 0.01 && fabs(tIntersection_2) < 0.01) ||        //Both zero
+                (fabs(tIntersection_1) < 0.01 && tIntersection_2 < -0.01) ||        //1st is 0, 2nd is neg
+                (tIntersection_1 < -0.01 && fabs(tIntersection_2) < 0.01) ||        //1st is neg, 2nd is 0
+                (tIntersection_1 < -0.01 && tIntersection_2 < -0.01)){              //Both negative
+            return false;              //Both negative
+        }
 
-        if(fabs(tIntersection_1) < 0.01 && fabs(tIntersection_2) < 0.01) return false;    //Both zero
-        if(fabs(tIntersection_1) < 0.01 && tIntersection_2 < -0.01) return false;         //1st is 0, 2nd is neg
-        if(tIntersection_1 < -0.01 && fabs(tIntersection_2) < 0.01) return false;         //1st is neg, 2nd is 0
-        if(tIntersection_1 < -0.01 && tIntersection_2 < -0.01) return false;              //Both negative
+        // Because intersPoint gets set with every new intersection calculation, we want to be able
+        // to restore the previous intersection point if the new one is without the limits of the plane.
+        glm::vec3 intersPoint_backup = myEnv->intersPoint;
+        double tValueBackup = myEnv->tValue;
 
         // Next, if both numbers are positive, use the smaller one
         if(tIntersection_1 > 0.01 && tIntersection_2 > 0.01){
@@ -64,7 +61,7 @@ bool Sphere::isIntersected(Environment *myEnv, glm::vec3 rayDir){
 //    myEnv->intersNorm.x = tempNorm.x;
 //    myEnv->intersNorm.y = tempNorm.y;
 //    myEnv->intersNorm.z = tempNorm.z;
-    return true;
+    return true; //Putting this here b/c there are many ways in which we can return true
 }
 
 void Sphere::getIntersectionPoint(Environment *myEnv, double tInt, glm::vec3 rayDir){

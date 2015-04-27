@@ -7,6 +7,7 @@
 #include "RgbImage.h"
 #include "ObjectCreator.h"
 #include "Shading.h"
+#include "Reflection.h"
 #include "Environment.h"
 //#include "Environment_struct.h"
 
@@ -36,6 +37,8 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     float myRed = 0;
     float myGreen = 0;
     float myBlue = 0;
+    //For reflections
+    double kSpecular = 0;
 
     //Because t will change with every intersection, each time it will get "reset"
     double tCopy = myEnv->tValue;
@@ -95,8 +98,10 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
             }
             if(containsIntersection){ //Set the pixel colour of the closest intersected object, if any
                 oArr[closestObject]->getColour(myRed, myGreen, myBlue);
-                Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue);
+                //Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue);
                 myEnv->finalImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
+                //oArr[closestObject]->getSpecular(kSpecular);
+                Reflection::computeReflection(myEnv, oArr, myRed, myGreen, myBlue, kSpecular);
             }
             currentLowestT = tCopy; //Reset current lowest t
         }

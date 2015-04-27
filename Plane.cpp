@@ -1,6 +1,6 @@
 #include "Plane.h"
 
-Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red, long green, long blue){
+Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red, long green, long blue, double kS){
     normal = norm;
     point = pt;
     min = mi;
@@ -8,6 +8,7 @@ Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red,
     redC = red;
     greenC = green;
     blueC = blue;
+    kSpecular = kS;
 }
 
 bool Plane::isIntersected(Environment *myEnv, glm::vec3 rayDir){

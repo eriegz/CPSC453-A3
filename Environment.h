@@ -22,6 +22,7 @@ public:
     glm::vec3 intersNorm;
     double tValue;
     double tValueMax;
+    int reflectionDepth;
 
     //Point lights
     vector<glm::vec3> lightSources;

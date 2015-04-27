@@ -17,8 +17,9 @@ private:
     long redC;
     long greenC;
     long blueC;
+    double kSpecular;
 public:
-    Sphere(glm::vec4, double, long, long, long);
+    Sphere(glm::vec4, double, long, long, long, double);
     bool isIntersected(Environment*, glm::vec3);
     void getIntersectionPoint(Environment*, double tInt, glm::vec3);
     void getColour(float &, float &, float &);

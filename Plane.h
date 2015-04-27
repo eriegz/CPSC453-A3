@@ -16,8 +16,9 @@ private:
     long redC;
     long greenC;
     long blueC;
+    double kSpecular;
 public:
-    Plane(glm::vec3, glm::vec3, glm::vec3, glm::vec3, long, long, long);
+    Plane(glm::vec3, glm::vec3, glm::vec3, glm::vec3, long, long, long, double);
     bool isIntersected(Environment*, glm::vec3);
     void getIntersectionPoint(Environment*, double tInt, glm::vec3);
     void getColour(float &, float &, float &);
