@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     Triangle.cpp \
     RgbImage.cpp \
     ObjectCreator.cpp \
-    Shading.cpp
+    Shading.cpp \
+    Environment.cpp
 
 HEADERS  += SceneObject.h \
     Sphere.h \
@@ -27,4 +28,5 @@ HEADERS  += SceneObject.h \
     RgbImage.h \
     ObjectCreator.h \
     Shading.h \
+    Environment_struct.h \
     Environment.h

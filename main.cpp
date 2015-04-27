@@ -8,6 +8,7 @@
 #include "ObjectCreator.h"
 #include "Shading.h"
 #include "Environment.h"
+//#include "Environment_struct.h"
 
 #include "glm/glm.hpp"
 
@@ -15,34 +16,6 @@
 #include <vector>
 #include <iostream>
 using namespace std;
-
-void initializeMyEnvironment(Environment *myE){
-    //Camera, intersection point
-    myE->camPosition = glm::vec3(7.8, 5.0, -12.3);
-    myE->intersPoint = glm::vec3(0, 0, 0);
-    myE->intersNorm = glm::vec3(0, 0, 0);
-    myE->tValue = 40;
-    myE->tValueMax = 40;
-
-    //3 point light sources
-    myE->pointLight1 = glm::vec3(15, 2, 2); //Front left
-    myE->pointLight2 = glm::vec3(17, 6, 0); //Front right
-    myE->pointLight3 = glm::vec3(16, 5, 6); //Back right
-    myE->pointLight4 = glm::vec3(14, 2, 7); //Back left
-    myE->pointLight5 = glm::vec3(15, 4, 4); //Inner Front left
-    myE->pointLight6 = glm::vec3(17, 4, 2); //Inner Front right
-    myE->pointLight7 = glm::vec3(16, 3, 4); //Inner Back right
-    myE->pointLight8 = glm::vec3(14, 4, 5); //Inner Back left
-    myE->pointLight9 = glm::vec3(15, 5, 5);  //Inner inner Front left
-    myE->pointLight10 = glm::vec3(17, 3, 3); //Inner inner Front right
-    myE->pointLight11 = glm::vec3(16, 2, 3); //Inner inner Back right
-    myE->pointLight12 = glm::vec3(14, 5, 4); //Inner inner Back left
-
-    //Define our image plane (a.k.a. world window), and our pixel map
-    myE->finalImage = new RgbImage("../../../../A3/finalImage.bmp");
-    myE->bottomLeftImagePlane = glm::vec3(4.6, 2, -8);
-    myE->topRightImagePlane = glm::vec3(8.8, 8, -7);
-}
 
 void initializeMyObjects(vector<SceneObject*> &oA){
     //Create the floor and walls
@@ -184,8 +157,10 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
 
 int main(){
     //Create an Environment struct
-    Environment *myEnvironment = new Environment;
-    initializeMyEnvironment(myEnvironment);
+    Environment *myEnvironment_struct = new Environment;
+    //initializeMyEnvironment(myEnvironment_struct);
+    Environment *myEnvironment = new Environment();
+    myEnvironment->initializeMyEnvironment();
 
     //Create our object array
     vector<SceneObject*> objectArr;

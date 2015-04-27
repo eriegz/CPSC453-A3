@@ -1,11 +1,14 @@
 #ifndef ENVIRONMENT
 #define ENVIRONMENT
 
+#include "glm/glm.hpp"
 #include "RgbImage.h"
 
-// This struct will hold all of the things about the scene that aren't objects
-// (i.e.: camera direction, image frame, lights, etc.)
-struct Environment{
+class Environment{
+public:
+    Environment(){}
+    void initializeMyEnvironment();
+
     //Camera, intersection, etc.
     glm::vec3 camPosition;
     glm::vec3 camDirection;
@@ -32,6 +35,6 @@ struct Environment{
     RgbImage *finalImage;
     glm::vec3 bottomLeftImagePlane;
     glm::vec3 topRightImagePlane;
-} /*myEnvironment*/;
+};
 
 #endif // ENVIRONMENT

@@ -2,6 +2,7 @@
 #define SCENEOBJECT_H
 
 #include "glm/glm.hpp"
+//#include "Environment_struct.h"
 #include "Environment.h"
 
 #include <string>
