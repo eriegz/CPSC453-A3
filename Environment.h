@@ -1,8 +1,14 @@
 #ifndef ENVIRONMENT
 #define ENVIRONMENT
 
+#define GLM_SWIZZLE
+
 #include "glm/glm.hpp"
 #include "RgbImage.h"
+
+#include <vector>
+#include <iostream>
+using namespace std;
 
 class Environment{
 public:
@@ -18,18 +24,7 @@ public:
     double tValueMax;
 
     //Point lights
-    glm::vec3 pointLight1;
-    glm::vec3 pointLight2;
-    glm::vec3 pointLight3;
-    glm::vec3 pointLight4;
-    glm::vec3 pointLight5;
-    glm::vec3 pointLight6;
-    glm::vec3 pointLight7;
-    glm::vec3 pointLight8;
-    glm::vec3 pointLight9;
-    glm::vec3 pointLight10;
-    glm::vec3 pointLight11;
-    glm::vec3 pointLight12;
+    vector<glm::vec3> lightSources;
 
     //Image plane
     RgbImage *finalImage;

@@ -60,7 +60,7 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
 
     for(int i = 0/*632*/; i < myRows/*633*/; i++){
         double zOffset = ((double)i / (double)myRows) * zDistance;
-        for(int j = 0/*596*/; j < myCols/*598*/; j++){
+        for(int j = 0/*596*/; j < myCols/*597*/; j++){
 //            cout << "\nPIXEL whatever ============\n" << endl;
             double yOffset = ((double)j / (double)myCols) * imWidth;
             double xOffset = ((double)i / (double)myRows) * imHeight;
@@ -106,9 +106,7 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
 }
 
 int main(){
-    //Create an Environment struct
-//    Environment *myEnvironment_struct = new Environment;
-//    initializeMyEnvironment(myEnvironment_struct);
+    //Create the Environment object
     Environment *myEnvironment = new Environment();
     myEnvironment->initializeMyEnvironment();
 
@@ -116,6 +114,7 @@ int main(){
     vector<SceneObject*> objectArr;
     ObjectCreator::initializeMyObjects(objectArr);
 
+    //The program's main "go" functions
     clearImage(myEnvironment->finalImage);
     traversePixels(myEnvironment, objectArr);
 }
