@@ -28,5 +28,4 @@ HEADERS  += SceneObject.h \
     RgbImage.h \
     ObjectCreator.h \
     Shading.h \
-    Environment_struct.h \
     Environment.h

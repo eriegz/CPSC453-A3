@@ -77,3 +77,42 @@ void ObjectCreator::createTriangles(Triangle *&t1, Triangle *&t2, Triangle *&t3,
         t4 = new Triangle(vertex1, vertex2, vertex3, 212, 0, 174);
     }
 }
+
+void ObjectCreator::initializeMyObjects(vector<SceneObject*> &oA){
+    //Create the floor and walls
+    Plane* pFloor;
+    Plane* pRight;
+    Plane* pBack;
+    Plane* pLeft;
+    ObjectCreator::createScene(pFloor, pRight, pBack, pLeft);
+
+    //Create our 4 spheres
+    Sphere* sphere1;
+    Sphere* sphere2;
+    Sphere* sphere3;
+    Sphere* sphere4;
+    ObjectCreator::createSpheres(sphere1, sphere2, sphere3, sphere4);
+
+    //Create our 3 triangles
+    Triangle* tri1;
+    Triangle* tri2;
+    Triangle* tri3;
+    Triangle* tri4;
+    ObjectCreator::createTriangles(tri1, tri2, tri3, tri4);
+
+    //Add spheres
+    oA.push_back(sphere1);
+    oA.push_back(sphere2);
+    oA.push_back(sphere3);
+    oA.push_back(sphere4);
+    //Add planes
+    oA.push_back(pFloor);
+    oA.push_back(pRight);
+    oA.push_back(pBack);
+    oA.push_back(pLeft);
+    //Add triangles
+    oA.push_back(tri1);
+    oA.push_back(tri2);
+    oA.push_back(tri3);
+    oA.push_back(tri4);
+}
