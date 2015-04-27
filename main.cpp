@@ -58,9 +58,9 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     //Store the normal of our ray intersection
     //glm::vec3 intersNormal(0, 0, 0);
 
-    for(int i = 0/*632*/; i < myRows/*633*/; i++){
+    for(int i = 0/*362*/; i < myRows/*363*/; i++){
         double zOffset = ((double)i / (double)myRows) * zDistance;
-        for(int j = 0/*596*/; j < myCols/*597*/; j++){
+        for(int j = 0/*392*/; j < myCols/*393*/; j++){
 //            cout << "\nPIXEL whatever ============\n" << endl;
             double yOffset = ((double)j / (double)myCols) * imWidth;
             double xOffset = ((double)i / (double)myRows) * imHeight;
@@ -92,7 +92,6 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
                         myEnv->intersPoint = closestIntersPt;
                     }
                 }
-                //myEnv->tValue = tCopy; //Reset t
             }
             if(containsIntersection){ //Set the pixel colour of the closest intersected object, if any
                 oArr[closestObject]->getColour(myRed, myGreen, myBlue);
@@ -117,4 +116,13 @@ int main(){
     //The program's main "go" functions
     clearImage(myEnvironment->finalImage);
     traversePixels(myEnvironment, objectArr);
+
+//    double x = 13;
+//    rand();
+//    double random = rand();
+//    double random_0_1 = (double)(random / RAND_MAX);
+//    cout << "rand() = " << random << endl;
+//    cout << "RAND_MAX = " << RAND_MAX << endl;
+//    cout << "random_0_1 = " << random_0_1 << endl;
+//    cout << "x + rand() = " << x + random << endl;
 }
