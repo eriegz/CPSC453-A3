@@ -87,3 +87,7 @@ void Plane::getColour(float &myR, float &myG, float &myB){
     myG = greenC;
     myB = blueC;
 }
+
+void Plane::getSpecular(double &kS){
+    kS = kSpecular;
+}

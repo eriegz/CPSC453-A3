@@ -108,3 +108,7 @@ void Triangle::getColour(float &myR, float &myG, float &myB){
     myG = greenC;
     myB = blueC;
 }
+
+void Triangle::getSpecular(double &kS){
+    kS = kSpecular;
+}

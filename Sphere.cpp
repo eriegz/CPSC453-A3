@@ -75,3 +75,7 @@ void Sphere::getColour(float &myR, float &myG, float &myB){
     myG = greenC;
     myB = blueC;
 }
+
+void Sphere::getSpecular(double &kS){
+    kS = kSpecular;
+}

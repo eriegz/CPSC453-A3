@@ -23,6 +23,7 @@ public:
     bool isIntersected(Environment*, glm::vec3);
     void getIntersectionPoint(Environment*, double tInt, glm::vec3);
     void getColour(float &, float &, float &);
+    void getSpecular(double &);
 };
 
 #endif // SPHERE_H
