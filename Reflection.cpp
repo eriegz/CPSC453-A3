@@ -61,15 +61,22 @@ void Reflection::computeReflection(Environment* myEnv, vector<SceneObject*> oA, 
 //    cout << "closestIntersPt = [" << closestIntersPt.x << ", " << closestIntersPt.y << ", " << closestIntersPt.z << "]" << endl;
 //    cout << "Distance from cameraPos to closestIntersPt = " << glm::length(closestIntersPt - myEnv->camPosition) << endl;
 
-    if(containsIntersection){ //Reflection// Generate our reflected colour//We now have the closest intersection
+    if(containsIntersection){ //Reflection
         float reflR = 0;
         float reflG = 0;
         float reflB = 0;
         oA[closestObject]->getColour(reflR, reflG, reflB);
+        // Now recursively calculate the next reflection
+        myEnv->reflectionDepth = myEnv->reflectionDepth - 1;
+        // Get our reflected object's kSpecular component
+        double refl_kSpecular;
+        oA[closestObject]->getSpecular(refl_kSpecular);
+        if(kS != 0)
+            computeReflection(myEnv, oA, reflR, reflG, reflB, refl_kSpecular);
         // Blend the two colours together
-        myR = ((kS * (double)reflR) + (1 - kS) * myR);
-        myG = ((kS * (double)reflG) + (1 - kS) * myG);
-        myB = ((kS * (double)reflB) + (1 - kS) * myB);
+        myR = ((kS * reflR) + (1 - kS) * myR);
+        myG = ((kS * reflG) + (1 - kS) * myG);
+        myB = ((kS * reflB) + (1 - kS) * myB);
         // Clamp our final values
         if(myR > 255) myR = 255; if(myR < 0) myR = 0;
         if(myG > 255) myG = 255; if(myG < 0) myG = 0;
@@ -87,14 +94,6 @@ void Reflection::computeReflection(Environment* myEnv, vector<SceneObject*> oA, 
 //        cout << "Reflected object's kSpecular = " << temp << endl;
 //        cout << "Reflected object's colour (R, G, B) = (" << reflR << ", " << reflG << ", " << reflB << ")" << endl;
 //        cout << "Writing in colour (R, G, B) = (" << (int)myR << ", " << (int)myG << ", " << (int)myB << ")\n" << endl;
-
-        // Now recursively calculate the next reflection
-        myEnv->reflectionDepth = myEnv->reflectionDepth - 1;
-        // Get our reflected object's kSpecular component
-        double refl_kSpecular;
-        oA[closestObject]->getSpecular(refl_kSpecular);
-        if(kS != 0)
-            computeReflection(myEnv, oA, myR, myG, myB, refl_kSpecular);
     } else {
         // Blend into black
 //        cout << "Blending into black." << endl;

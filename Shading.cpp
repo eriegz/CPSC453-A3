@@ -1,6 +1,6 @@
 #include "Shading.h"
 
-void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float &myR, float &myG, float &myB){
+void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float &myR, float &myG, float &myB, double kS){
     //Calculate all shadow rays, store them in a vector
     vector<glm::vec3> sRays;
     for(vector<glm::vec3>::size_type itr = 0; itr != myEnv->lightSources.size(); itr++){
@@ -53,9 +53,11 @@ void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float 
             //
             //    ( 0.5 / 10 ) * 0.5 + 0.50 = 0.92
             //
-            double shadowAttn = ( myEnv->tValue / (myEnv->tValueMax / 4) ) * 0.5 + 0.55;
+            double shadowAttn = ( myEnv->tValue / (myEnv->tValueMax / 4) ) * 0.5 + 0.50;
+            shadowAttn += 0.2;
             if(shadowAttn > 0.95) shadowAttn = 0.95; //Clamp our attenuation factor
             myR *= shadowAttn; myG *= shadowAttn; myB *= shadowAttn; //Darken all the colours a bit, for now
+            //phongShading
         }
         currentLowestT = tCopy; //Reset current lowest t
         myEnv->tValue = tCopy; //Reset t, as it gets changed by intersection calculations

@@ -107,7 +107,7 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
                 oArr[closestObject]->getColour(myRed, myGreen, myBlue);
                 oArr[closestObject]->getSpecular(kSpecular);
                 Reflection::computeReflection(myEnv, oArr, myRed, myGreen, myBlue, kSpecular);
-                Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue);
+                Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue, kSpecular);
                 myEnv->reflectionDepth = reflDepth; //Restore our reflection depth
 
                 //Artificially brighten things up a bit
