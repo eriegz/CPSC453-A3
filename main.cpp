@@ -44,6 +44,8 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     double tCopy = myEnv->tValue;
     //And save our current lowest t
     double currentLowestT = tCopy;
+    //Save our reflection depth
+    int reflDepth = myEnv->reflectionDepth;
 
     // Make local copies of the image coordinates for simplicity
     // (Otherwise the names are too long)
@@ -61,10 +63,12 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     //Store the normal of our ray intersection
     //glm::vec3 intersNormal(0, 0, 0);
 
-    for(int i = 0/*362*/; i < myRows/*363*/; i++){
+    for(int i = 000/*717*/; i < myRows/*718*/; i++){
         double zOffset = ((double)i / (double)myRows) * zDistance;
-        for(int j = 0/*392*/; j < myCols/*393*/; j++){
-//            cout << "\nPIXEL whatever ============\n" << endl;
+        for(int j = 000/*473*/; j < myCols/*475*/; j++){
+//            cout << "=======================================" << endl;
+//            cout << "=========== PIXEL whatever ============" << endl;
+//            cout << "=======================================\n" << endl;
             double yOffset = ((double)j / (double)myCols) * imWidth;
             double xOffset = ((double)i / (double)myRows) * imHeight;
             pixelPosition.x = bCorner.x + xOffset;
@@ -81,6 +85,7 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
             // than an older one. If this happens, we want to revert intersPoint back to its
             // previous value.
             glm::vec3 closestIntersPt = myEnv->intersPoint;
+            glm::vec3 closestIntNorm(0, 0, 0);
 
             for(vector<SceneObject>::size_type itr = 0; itr != oArr.size(); itr++){
                 if(oArr[itr]->isIntersected(myEnv, rayDir3) == true){
@@ -89,19 +94,30 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
                         currentLowestT = myEnv->tValue;
                         closestIntersPt = myEnv->intersPoint;
                         closestObject = itr;
+                        closestIntNorm = myEnv->intersNorm;
                     }
                     if(myEnv->tValue > currentLowestT){
                         myEnv->tValue = currentLowestT;
                         myEnv->intersPoint = closestIntersPt;
+                        myEnv->intersNorm = closestIntNorm;
                     }
                 }
             }
             if(containsIntersection){ //Set the pixel colour of the closest intersected object, if any
                 oArr[closestObject]->getColour(myRed, myGreen, myBlue);
-                //Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue);
-                myEnv->finalImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
-                //oArr[closestObject]->getSpecular(kSpecular);
+                oArr[closestObject]->getSpecular(kSpecular);
                 Reflection::computeReflection(myEnv, oArr, myRed, myGreen, myBlue, kSpecular);
+                Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue);
+                myEnv->reflectionDepth = reflDepth; //Restore our reflection depth
+
+                //Artificially brighten things up a bit
+//                myRed *= 1.1; myGreen *= 1.1; myBlue *= 1.1;
+//                if(myRed > 255) myRed = 255; if(myRed < 0) myRed = 0;
+//                if(myGreen > 255) myGreen = 255; if(myGreen < 0) myGreen = 0;
+//                if(myBlue > 255) myBlue = 255; if(myBlue < 0) myBlue = 0;
+
+//                cout << "Inside main, RGB = (" << myRed << ", " << myGreen << ", " << myBlue << ")" << endl;
+                myEnv->finalImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
             }
             currentLowestT = tCopy; //Reset current lowest t
         }

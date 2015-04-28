@@ -53,7 +53,7 @@ void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float 
             //
             //    ( 0.5 / 10 ) * 0.5 + 0.50 = 0.92
             //
-            double shadowAttn = ( myEnv->tValue / (myEnv->tValueMax / 4) ) * 0.5 + 0.50;
+            double shadowAttn = ( myEnv->tValue / (myEnv->tValueMax / 4) ) * 0.5 + 0.55;
             if(shadowAttn > 0.95) shadowAttn = 0.95; //Clamp our attenuation factor
             myR *= shadowAttn; myG *= shadowAttn; myB *= shadowAttn; //Darken all the colours a bit, for now
         }

@@ -57,10 +57,7 @@ bool Sphere::isIntersected(Environment *myEnv, glm::vec3 rayDir){
             }
         }
     } else return false;
-//    glm::vec3 tempNorm = myEnv->intersPoint - glm::vec3(centerPosition);
-//    myEnv->intersNorm.x = tempNorm.x;
-//    myEnv->intersNorm.y = tempNorm.y;
-//    myEnv->intersNorm.z = tempNorm.z;
+    myEnv->intersNorm = glm::normalize(myEnv->intersPoint - (glm::vec3)centerPosition);
     return true; //Putting this here b/c there are many ways in which we can return true
 }
 

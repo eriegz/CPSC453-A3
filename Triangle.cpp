@@ -61,6 +61,7 @@ bool Triangle::isIntersected(Environment *myEnv, glm::vec3 rayDir){
     // Because intersPoint gets set with every new intersection calculation, we want to be able
     // to restore the previous intersection point if the new one is without the limits of the plane.
     glm::vec3 intersPoint_backup = myEnv->intersPoint;
+    glm::vec3 intersNorm_backup = myEnv->intersNorm;
     double tValueBackup = myEnv->tValue;
     if(tempPlane.isIntersected(myEnv, rayDir) == true){
 //        cout << "Ray intersects with the plane the triangle sits in." << endl;
@@ -96,6 +97,8 @@ bool Triangle::isIntersected(Environment *myEnv, glm::vec3 rayDir){
         } else { //Not in the bounds of the triangle
             myEnv->intersPoint = intersPoint_backup;
             myEnv->tValue = tValueBackup;
+            myEnv->intersNorm = intersNorm_backup;
+            //cout << "myEnv->intersNorm restored to [" << myEnv->intersNorm.x << ", " << myEnv->intersNorm.y << ", " << myEnv->intersNorm.z << "]" << endl;
             return false;
         }
     } else { //Doesn't even intersect with the plane the triangle sits in
