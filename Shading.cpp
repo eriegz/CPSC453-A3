@@ -32,6 +32,10 @@ void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float 
         for(vector<SceneObject>::size_type itr_j = 0; itr_j != oA.size(); itr_j++){ //Traverse all scene objects
             if(oA[itr_j]->isIntersected(myEnv, sRays[itr_i]) == true){ //Current object in shadow
                 // ===== Closest shadow calculation =====
+                float intR, intG, intB;
+                oA[itr_j]->getColour(intR, intG, intB);
+                if(intR == 255 && intG == 255 && intB == 255)
+                    break;
                 containsIntersection = true;
                 if(myEnv->tValue < currentLowestT){
                     currentLowestT = myEnv->tValue;

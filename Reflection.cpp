@@ -5,6 +5,10 @@ void Reflection::computeReflection(Environment* myEnv, vector<SceneObject*> oA, 
     // shading, except now if we get an intersection, instead of darkening the myR, myG, and myB,
     // we will blend them with the colour of what we hit.
 
+    if((myR == 0 && myG == 118 && myB == 255) ||
+       (myR == 0 && myG == 230 && myB == 4))
+        return;
+
     // First of all, if the current object isn't reflective, then skip this entire function
     if(kS == 0)
         return;

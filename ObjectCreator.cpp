@@ -43,7 +43,7 @@ void ObjectCreator::createSpheres(Sphere *&sph1, Sphere *&sph2, Sphere *&sph3, S
     }
     { //Green sphere
         glm::vec4 center(1.5, 8.7, 0.5, 1);
-        sph2 = new Sphere(center, 1.3, 0, 230, 4, kD, kS);
+        sph2 = new Sphere(center, 1.3, 0, 230, 4, kD, .2);
     }
     { //Red sphere
         glm::vec4 center(0, 3.5, 6, 1);
@@ -121,4 +121,27 @@ void ObjectCreator::initializeMyObjects(vector<SceneObject*> &oA){
     oA.push_back(tri2);
     oA.push_back(tri3);
     oA.push_back(tri4);
+
+    // "Panel lights"
+    int numPanels = 5;
+    double xHeight = 11;
+    double panelHeight = 1;
+    double panelWidth = 8;
+    double zStart = 1, yStart = 1;
+    double gap = (numPanels * panelHeight) / (numPanels - 1);
+    Plane *p;
+
+    for(int i = 0; i < numPanels; i++){
+        glm::vec3 normal(-1,  0,  0);
+        glm::vec3 point (xHeight, yStart, zStart + (i * (panelHeight + gap)));
+        glm::vec3 min   (xHeight, yStart, zStart + (i * (panelHeight + gap)));
+        glm::vec3 max   (xHeight, yStart + panelWidth, zStart + (i * (panelHeight + gap)) + 1);
+        p = new Plane(normal, point, min, max, 255, 255, 255, 1, 0);
+//        cout << "Trying to create panel lights." << endl;
+//        cout << "normal = (" << normal.x << ", " << normal.y << ", " << normal.z << ")" << endl;
+//        cout << "point = (" << point.x << ", " << point.y << ", " << point.z << ")" << endl;
+//        cout << "min = (" << min.x << ", " << min.y << ", " << min.z << ")" << endl;
+//        cout << "max = (" << max.x << ", " << max.y << ", " << max.z << ")" << endl;
+        oA.push_back(p);
+    }
 }
