@@ -43,7 +43,7 @@ void ObjectCreator::createSpheres(Sphere *&sph1, Sphere *&sph2, Sphere *&sph3, S
     }
     { //Green sphere
         glm::vec4 center(1.5, 8.7, 0.5, 1);
-        sph2 = new Sphere(center, 1.3, 0, 230, 4, kD, .2);
+        sph2 = new Sphere(center, 1.3, 0, 230, 4, kD, .5);
     }
     { //Red sphere
         glm::vec4 center(0, 3.5, 6, 1);
