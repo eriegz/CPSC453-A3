@@ -1,7 +1,11 @@
 #include "Shading.h"
 
-void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float &myR, float &myG, float &myB, double kS){
-    //Calculate all shadow rays, store them in a vector
+void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float &myR, float &myG, float &myB, double kD, double kS){
+    // Exemption for panel lights
+    if(myR == 255 && myG == 255 && myB == 255)
+        return;
+
+    // Calculate all shadow rays, store them in a vector
     vector<glm::vec3> sRays;
     for(vector<glm::vec3>::size_type itr = 0; itr != myEnv->lightSources.size(); itr++){
         glm::vec3 shadowRay = glm::normalize(myEnv->lightSources[itr] - myEnv->intersPoint);
@@ -11,14 +15,14 @@ void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float 
     // Save a copy of myEnv's tValue, as it's going to be overwritten a bunch
     double tCopy = myEnv->tValueMax;
     double currentLowestT = tCopy; //Save our closest shadow intersection
-    // Next, save a copy of camPosition and intersPoint, as camPosition will be replaced with the intersection
-    // point for all of the intersection calculations inside this function.
+    // Next, save copies of everything
+    glm::vec3 intersPoint_Backup = myEnv->intersPoint;
     glm::vec3 camPos_copy = myEnv->camPosition;
     myEnv->camPosition = myEnv->intersPoint;
+    glm::vec3 intersNorm_Backup = myEnv->intersNorm;
 
     // Now, we traverse all the shadow rays. If a ray reports an intersection
     // with an object, then the original point is in the shadow of that light source.
-    double phongShading = 0;
     for(vector<glm::vec3>::size_type itr_i = 0; itr_i != sRays.size(); itr_i++){ //For all shadow rays
         // ===== Closest shadow calculation =====
         vector<SceneObject>::size_type closestObject = 0; //Stores closest object to camera
@@ -43,7 +47,7 @@ void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float 
         }
         if(containsIntersection){ //Point is in shadow
             // Inside here, the point is in shadow, and we know that it is the closest object's
-            // shadow. Only the diffuse component will be added to our Phong shade calculation,
+            // shadow. Only the ambient component will be added to our Phong shade calculation,
             // and the closer the object, the darker the shadow (attenuation). A tValue of 0.5, for
             // instance, will produce a shadow attenuation factor of:
             //
@@ -53,11 +57,57 @@ void Shading::computeShading(Environment* myEnv, vector<SceneObject*> oA, float 
             //
             //    ( 0.5 / 10 ) * 0.5 + 0.50 = 0.92
             //
+
+            //Use parts of this code later:
+            /*
             double shadowAttn = ( myEnv->tValue / (myEnv->tValueMax / 4) ) * 0.5 + 0.50;
             shadowAttn += 0.2;
             if(shadowAttn > 0.95) shadowAttn = 0.95; //Clamp our attenuation factor
             myR *= shadowAttn; myG *= shadowAttn; myB *= shadowAttn; //Darken all the colours a bit, for now
-            //phongShading
+            */
+
+            double kA = myEnv->kAmbient;
+            myR *= kA; myG *= kA; myB *= kA; //kA will never be > 1, so no need to clamp RGB values
+        } else { //Calculate all 3 Phong components
+            // First, pull the colour of our light
+            float lightR = myEnv->lightColours[itr_i].x; //Can use itr_i b/c it's just a glm::vec3 type
+            float lightG = myEnv->lightColours[itr_i].y;
+            float lightB = myEnv->lightColours[itr_i].z;
+
+            // -------- AMBIENT ---------
+            // Calculate ambient intensity
+            double kA = myEnv->kAmbient;
+            double Ia = 1.0; //Will attenuate this later
+
+            double Ii = 1; //Light source intensity to be used for diffuse and specular
+
+            // -------- DIFFUSE ---------
+            // Calculate diffuse component
+            double dot1 = glm::dot(sRays[itr_i], intersNorm_Backup);
+            double Id = Ii * dot1;
+
+            // ------- SPECULAR ---------
+            // Calculate specular component
+            glm::vec3 negShadowVec = -sRays[itr_i];
+            glm::vec3 reflLightRay = glm::normalize(reflect(negShadowVec, intersNorm_Backup));
+            glm::vec3 eyeVec = (camPos_copy - intersPoint_Backup);
+            glm::vec3 eyeVec_norm = glm::normalize(eyeVec);
+            double dot2 = glm::dot(eyeVec_norm, reflLightRay);
+            double Is = 0;
+            if(dot2 > 0) //Hidden from light source, therefore no specular highlights
+                Is = Ii * pow(dot2, 6);
+
+            // Blend our colours
+            myR = (kA * Ia * myR) + (kD * Id * myR) + (kS * Is * lightR);
+            myG = (kA * Ia * myG) + (kD * Id * myG) + (kS * Is * lightG);
+            myB = (kA * Ia * myB) + (kD * Id * myB) + (kS * Is * lightB);
+
+            // Clamp our RGB values (one direction only, b/c our operations are only additive
+            if(myR > 255) myR = 255;
+            if(myG > 255) myG = 255;
+            if(myB > 255) myB = 255;
+
+//            cout << "Writing in colours (R, G, B) = (" << (int)myR << ", " << (int)myG << ", " << (int)myB << ")\n" << endl;
         }
         currentLowestT = tCopy; //Reset current lowest t
         myEnv->tValue = tCopy; //Reset t, as it gets changed by intersection calculations

@@ -38,6 +38,7 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     float myGreen = 0;
     float myBlue = 0;
     //For reflections
+    double kDiffuse = 0;
     double kSpecular = 0;
 
     //Because t will change with every intersection, each time it will get "reset"
@@ -63,9 +64,9 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
     //Store the normal of our ray intersection
     //glm::vec3 intersNormal(0, 0, 0);
 
-    for(int i = 000/*717*/; i < myRows/*718*/; i++){
+    for(int i = 000/*388*/; i < myRows/*389*/; i++){
         double zOffset = ((double)i / (double)myRows) * zDistance;
-        for(int j = 000/*473*/; j < myCols/*475*/; j++){
+        for(int j = 000/*688*/; j < myCols/*689*/; j++){
 //            cout << "=======================================" << endl;
 //            cout << "=========== PIXEL whatever ============" << endl;
 //            cout << "=======================================\n" << endl;
@@ -105,18 +106,17 @@ void traversePixels(Environment *myEnv, vector<SceneObject*> oArr){
             }
             if(containsIntersection){ //Set the pixel colour of the closest intersected object, if any
                 oArr[closestObject]->getColour(myRed, myGreen, myBlue);
+                oArr[closestObject]->getDiffuse(kDiffuse);
                 oArr[closestObject]->getSpecular(kSpecular);
                 Reflection::computeReflection(myEnv, oArr, myRed, myGreen, myBlue, kSpecular);
-                Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue, kSpecular);
+                Shading::computeShading(myEnv, oArr, myRed, myGreen, myBlue, kDiffuse, kSpecular);
                 myEnv->reflectionDepth = reflDepth; //Restore our reflection depth
 
-                //Artificially brighten things up a bit
-//                myRed *= 1.1; myGreen *= 1.1; myBlue *= 1.1;
-//                if(myRed > 255) myRed = 255; if(myRed < 0) myRed = 0;
-//                if(myGreen > 255) myGreen = 255; if(myGreen < 0) myGreen = 0;
-//                if(myBlue > 255) myBlue = 255; if(myBlue < 0) myBlue = 0;
-
-//                cout << "Inside main, RGB = (" << myRed << ", " << myGreen << ", " << myBlue << ")" << endl;
+//                double brighten = 5.0;
+//                myRed *= brighten; myGreen *= brighten; myBlue *= brighten;
+                if(myRed > 255) myRed = 255;
+                if(myGreen > 255) myGreen = 255;
+                if(myBlue > 255) myBlue = 255;
                 myEnv->finalImage->SetRgbPixelc(i, j, (char)myRed, (char)myGreen, (char)myBlue);
             }
             currentLowestT = tCopy; //Reset current lowest t
@@ -137,13 +137,4 @@ int main(){
     //The program's main "go" functions
     clearImage(myEnvironment->finalImage);
     traversePixels(myEnvironment, objectArr);
-
-//    double x = 13;
-//    rand();
-//    double random = rand();
-//    double random_0_1 = (double)(random / RAND_MAX);
-//    cout << "rand() = " << random << endl;
-//    cout << "RAND_MAX = " << RAND_MAX << endl;
-//    cout << "random_0_1 = " << random_0_1 << endl;
-//    cout << "x + rand() = " << x + random << endl;
 }

@@ -11,6 +11,7 @@ class SceneObject{
 public:
     virtual bool isIntersected(Environment*, glm::vec3) = 0;
     virtual void getColour(float &, float &, float &) = 0;
+    virtual void getDiffuse(double &) = 0;
     virtual void getSpecular(double &) = 0;
 };
 

@@ -10,7 +10,7 @@ using namespace std;
 
 class Shading{
 public:
-    void static computeShading(Environment*, vector<SceneObject*>, float &, float &, float &, double);
+    void static computeShading(Environment*, vector<SceneObject*>, float &, float &, float &, double, double);
     void static calculateShadow();
 };
 

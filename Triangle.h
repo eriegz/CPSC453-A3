@@ -17,11 +17,13 @@ private:
     long redC;
     long greenC;
     long blueC;
+    double kDiffuse;
     double kSpecular;
 public:
-    Triangle(glm::vec3, glm::vec3, glm::vec3, long, long, long, double);
+    Triangle(glm::vec3, glm::vec3, glm::vec3, long, long, long, double, double);
     bool isIntersected(Environment*, glm::vec3);
     void getColour(float &, float &, float &);
+    void getDiffuse(double &);
     void getSpecular(double &);
 };
 

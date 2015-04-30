@@ -1,12 +1,13 @@
 #include "Triangle.h"
 
-Triangle::Triangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, long red, long green, long blue, double kS){
+Triangle::Triangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, long red, long green, long blue, double kD, double kS){
     vertex1 = v1;
     vertex2 = v2;
     vertex3 = v3;
     redC = red;
     greenC = green;
     blueC = blue;
+    kDiffuse = kD;
     kSpecular = kS;
 }
 
@@ -41,7 +42,9 @@ bool Triangle::isIntersected(Environment *myEnv, glm::vec3 rayDir){
 
     glm::vec3 tempMin(-999999, -999999, -999999); //Simulating an infinite plane
     glm::vec3 tempMax(999999, 999999, 999999);
-    Plane::Plane tempPlane(n_norm, vertex2, tempMin, tempMax, 0, 0, 0, 0);
+    double plane_kD, plane_kS;
+    plane_kD = plane_kS = 0;
+    Plane::Plane tempPlane(n_norm, vertex2, tempMin, tempMax, 0, 0, 0, plane_kD, plane_kS);
 
 //    cout << "u = [" << u.x << ", " << u.y << ", " << u.z << "]" << endl;
 //    cout << "v = [" << v.x << ", " << v.y << ", " << v.z << "]" << endl;
@@ -110,6 +113,10 @@ void Triangle::getColour(float &myR, float &myG, float &myB){
     myR = redC;
     myG = greenC;
     myB = blueC;
+}
+
+void Triangle::getDiffuse(double &kD){
+    kD = kDiffuse;
 }
 
 void Triangle::getSpecular(double &kS){

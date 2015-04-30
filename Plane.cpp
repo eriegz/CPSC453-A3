@@ -1,6 +1,6 @@
 #include "Plane.h"
 
-Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red, long green, long blue, double kS){
+Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red, long green, long blue, double kD, double kS){
     normal = norm;
     point = pt;
     min = mi;
@@ -8,6 +8,7 @@ Plane::Plane(glm::vec3 norm, glm::vec3 pt, glm::vec3 mi, glm::vec3 ma, long red,
     redC = red;
     greenC = green;
     blueC = blue;
+    kDiffuse = kD;
     kSpecular = kS;
 }
 
@@ -86,6 +87,10 @@ void Plane::getColour(float &myR, float &myG, float &myB){
     myR = redC;
     myG = greenC;
     myB = blueC;
+}
+
+void Plane::getDiffuse(double &kD){
+    kD = kDiffuse;
 }
 
 void Plane::getSpecular(double &kS){

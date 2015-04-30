@@ -23,9 +23,11 @@ public:
     double tValue;
     double tValueMax;
     int reflectionDepth;
+    double kAmbient; //Global Phong variable
 
     //Point lights
     vector<glm::vec3> lightSources;
+    vector<glm::vec3> lightColours;
 
     //Image plane
     RgbImage *finalImage;

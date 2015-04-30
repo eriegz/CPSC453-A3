@@ -1,11 +1,12 @@
 #include "Sphere.h"
 
-Sphere::Sphere(glm::vec4 cPos, double rad, long red, long green, long blue, double kS){
+Sphere::Sphere(glm::vec4 cPos, double rad, long red, long green, long blue, double kD, double kS){
     centerPosition = cPos;
     radius = rad;
     redC = red;
     greenC = green;
     blueC = blue;
+    kDiffuse = kD;
     kSpecular = kS;
 }
 
@@ -71,6 +72,10 @@ void Sphere::getColour(float &myR, float &myG, float &myB){
     myR = redC;
     myG = greenC;
     myB = blueC;
+}
+
+void Sphere::getDiffuse(double &kD){
+    kD = kDiffuse;
 }
 
 void Sphere::getSpecular(double &kS){
